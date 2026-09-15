@@ -47,7 +47,7 @@ const int scorePerEnemy = 5;
 
 int cameraX = 0;
 
-const int screenWidth = 1280;
+const int screenWidth = 800;
 
 const int level1WorldWidth = 3000;
 
@@ -58,7 +58,7 @@ const int level1WorldWidth = 3000;
 
 int level2CameraX = 0;
 
-const int level2ScreenWidth = 1280;
+const int level2ScreenWidth = 800;
 
 const int level2WorldWidth = 4000;
 
@@ -164,8 +164,8 @@ void drawMenu()
 	iShowImage(
 		0,
 		0,
-		1280,
-		720,
+		800,
+		600,
 		menuImage
 		);
 }
@@ -220,8 +220,8 @@ void drawStory()
 	iShowImage(
 		0,
 		0,
-		1280,
-		720,
+		800,
+		600,
 		storyImage
 		);
 }
@@ -236,8 +236,8 @@ void drawGameOver()
 	iShowImage(
 		0,
 		0,
-		1280,
-		720,
+		800,
+		600,
 		gameoverImage
 		);
 }
@@ -252,8 +252,8 @@ void drawWin()
 	iShowImage(
 		0,
 		0,
-		1280,
-		720,
+		800,
+		600,
 		winImage
 		);
 }
@@ -268,8 +268,8 @@ void drawLevelSelect()
 	iShowImage(
 		0,
 		0,
-		1280,
-		720,
+		800,
+		600,
 		levelSelectImage
 		);
 }
@@ -283,7 +283,7 @@ void drawHealthUI()
 {
 	iShowImage(
 		20,
-		650,
+		540,
 		35,
 		35,
 		heartImage
@@ -303,7 +303,7 @@ void drawHealthUI()
 
 	iText(
 		65,
-		660,
+		550,
 		healthText,
 		GLUT_BITMAP_HELVETICA_18
 		);
@@ -315,7 +315,7 @@ void drawHealthUI()
 
 	iFilledRectangle(
 		20,
-		625,
+		515,
 		200,
 		15
 		);
@@ -524,8 +524,8 @@ void drawEnemyLevel2()
 void drawScoreUI()
 {
 	iShowImage(
-		1050,
-		650,
+		700,
+		540,
 		35,
 		35,
 		coinImage
@@ -544,8 +544,8 @@ void drawScoreUI()
 	iSetColor(255, 255, 255);
 
 	iText(
-		1095,
-		660,
+		745,
+		550,
 		scoreText
 		);
 }
@@ -565,7 +565,7 @@ void drawLevel1()
 		backgroundX,
 		0,
 		screenWidth,
-		720,
+		600,
 		backgroundImage
 		);
 
@@ -574,7 +574,7 @@ void drawLevel1()
 		backgroundX + screenWidth,
 		0,
 		screenWidth,
-		720,
+		600,
 		backgroundImage
 		);
 
@@ -631,8 +631,8 @@ void drawLevel1()
 	// Level
 
 	iText(
-		600,
-		700,
+		365,
+		580,
 		"LEVEL 1",
 		GLUT_BITMAP_HELVETICA_18
 		);
@@ -1156,7 +1156,7 @@ void drawLevel2()
 		backgroundX,
 		0,
 		level2ScreenWidth,
-		720,
+		600,
 		level2BackgroundImage
 		);
 
@@ -1165,7 +1165,7 @@ void drawLevel2()
 		backgroundX + level2ScreenWidth,
 		0,
 		level2ScreenWidth,
-		720,
+		600,
 		level2BackgroundImage
 		);
 
@@ -1222,8 +1222,8 @@ void drawLevel2()
 	// Level
 
 	iText(
-		600,
-		700,
+		365,
+		580,
 		"LEVEL 2",
 		GLUT_BITMAP_HELVETICA_18
 		);

@@ -332,8 +332,8 @@ void iSpecialKeyboard(unsigned char key)
 int main()
 {
 	iInitialize(
-		1280,
-		720,
+		800,
+		600,
 		"The Last Jade Marquis"
 		);
 
