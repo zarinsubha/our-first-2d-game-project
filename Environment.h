@@ -1,7 +1,6 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
-
 // ============================================================
 // FORWARD DECLARATION
 // ============================================================
@@ -42,12 +41,19 @@ const int scorePerEnemy = 5;
 
 
 // ============================================================
+// SCREEN SIZE
+// ============================================================
+
+const int screenWidth = 1000;
+
+const int screenHeight = 600;
+
+
+// ============================================================
 // LEVEL 1 CAMERA
 // ============================================================
 
 int cameraX = 0;
-
-const int screenWidth = 800;
 
 const int level1WorldWidth = 3000;
 
@@ -58,11 +64,14 @@ const int level1WorldWidth = 3000;
 
 int level2CameraX = 0;
 
-const int level2ScreenWidth = 800;
+const int level2ScreenWidth = 1000;
 
 const int level2WorldWidth = 4000;
 
-const int cameraFollowX = 500;
+
+// Camera starts following player after this position
+
+const int cameraFollowX = 400;
 
 
 // ============================================================
@@ -100,9 +109,12 @@ int level2CurrentWave = 1;
 
 void resetLevel()
 {
-	// Player
+	// --------------------------------------------------------
+	// PLAYER
+	// --------------------------------------------------------
 
 	playerX = 150;
+
 	playerY = groundY;
 
 	playerHealth = playerMaxHealth;
@@ -114,7 +126,9 @@ void resetLevel()
 	runFrame = 0;
 
 
-	// Attack
+	// --------------------------------------------------------
+	// ATTACK
+	// --------------------------------------------------------
 
 	isAttacking = false;
 
@@ -125,31 +139,41 @@ void resetLevel()
 	attackTimer = 0;
 
 
-	// Jump
+	// --------------------------------------------------------
+	// JUMP
+	// --------------------------------------------------------
 
 	isJumping = false;
 
 	velocityY = 0;
 
 
-	// Camera
+	// --------------------------------------------------------
+	// CAMERA
+	// --------------------------------------------------------
 
 	cameraX = 0;
 
 
-	// Score
+	// --------------------------------------------------------
+	// SCORE
+	// --------------------------------------------------------
 
 	score = 0;
 
 
-	// Enemy system
+	// --------------------------------------------------------
+	// ENEMY SYSTEM
+	// --------------------------------------------------------
 
 	enemiesDefeated = 0;
 
 	currentEnemy = 1;
 
 
-	// Spawn first enemy
+	// --------------------------------------------------------
+	// SPAWN FIRST ENEMY
+	// --------------------------------------------------------
 
 	spawnEnemy();
 }
@@ -164,8 +188,8 @@ void drawMenu()
 	iShowImage(
 		0,
 		0,
-		800,
-		600,
+		screenWidth,
+		screenHeight,
 		menuImage
 		);
 }
@@ -190,7 +214,9 @@ void updateMenuAction()
 	}
 
 
-	// Start game
+	// --------------------------------------------------------
+	// START GAME
+	// --------------------------------------------------------
 
 	if (selectedMenuButton == 1)
 	{
@@ -202,7 +228,9 @@ void updateMenuAction()
 	}
 
 
-	// Exit
+	// --------------------------------------------------------
+	// EXIT
+	// --------------------------------------------------------
 
 	else if (selectedMenuButton == 5)
 	{
@@ -220,8 +248,8 @@ void drawStory()
 	iShowImage(
 		0,
 		0,
-		800,
-		600,
+		screenWidth,
+		screenHeight,
 		storyImage
 		);
 }
@@ -236,8 +264,8 @@ void drawGameOver()
 	iShowImage(
 		0,
 		0,
-		800,
-		600,
+		screenWidth,
+		screenHeight,
 		gameoverImage
 		);
 }
@@ -252,8 +280,8 @@ void drawWin()
 	iShowImage(
 		0,
 		0,
-		800,
-		600,
+		screenWidth,
+		screenHeight,
 		winImage
 		);
 }
@@ -268,8 +296,8 @@ void drawLevelSelect()
 	iShowImage(
 		0,
 		0,
-		800,
-		600,
+		screenWidth,
+		screenHeight,
 		levelSelectImage
 		);
 }
@@ -281,14 +309,18 @@ void drawLevelSelect()
 
 void drawHealthUI()
 {
+	// Heart icon
+
 	iShowImage(
 		20,
-		540,
+		545,
 		35,
 		35,
 		heartImage
 		);
 
+
+	// Health number
 
 	char healthText[20];
 
@@ -298,40 +330,42 @@ void drawHealthUI()
 		playerHealth
 		);
 
-
 	iSetColor(255, 255, 255);
 
 	iText(
 		65,
-		550,
+		555,
 		healthText,
 		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// Health bar background
+	// --------------------------------------------------------
+	// HEALTH BAR BACKGROUND
+	// --------------------------------------------------------
 
 	iSetColor(80, 0, 0);
 
 	iFilledRectangle(
 		20,
-		515,
+		520,
 		200,
 		15
 		);
 
 
-	// Health bar
+	// --------------------------------------------------------
+	// HEALTH BAR
+	// --------------------------------------------------------
 
 	iSetColor(0, 255, 0);
 
 	int healthBarWidth =
 		(playerHealth * 200) / playerMaxHealth;
 
-
 	iFilledRectangle(
 		20,
-		625,
+		520,
 		healthBarWidth,
 		15
 		);
@@ -471,7 +505,6 @@ void drawEnemyLevel1()
 
 // ============================================================
 // DRAW ENEMY LEVEL 2
-// SAME ENEMY AS LEVEL 1
 // ============================================================
 
 void drawEnemyLevel2()
@@ -523,9 +556,11 @@ void drawEnemyLevel2()
 
 void drawScoreUI()
 {
+	// Coin icon moved to top-right
+
 	iShowImage(
-		700,
-		540,
+		850,
+		545,
 		35,
 		35,
 		coinImage
@@ -544,9 +579,10 @@ void drawScoreUI()
 	iSetColor(255, 255, 255);
 
 	iText(
-		745,
-		550,
-		scoreText
+		895,
+		555,
+		scoreText,
+		GLUT_BITMAP_HELVETICA_18
 		);
 }
 
@@ -561,11 +597,15 @@ void drawLevel1()
 		-(cameraX % screenWidth);
 
 
+	// --------------------------------------------------------
+	// BACKGROUND
+	// --------------------------------------------------------
+
 	iShowImage(
 		backgroundX,
 		0,
 		screenWidth,
-		600,
+		screenHeight,
 		backgroundImage
 		);
 
@@ -574,21 +614,37 @@ void drawLevel1()
 		backgroundX + screenWidth,
 		0,
 		screenWidth,
-		600,
+		screenHeight,
 		backgroundImage
 		);
 
 
+	// --------------------------------------------------------
+	// PLAYER
+	// --------------------------------------------------------
+
 	drawPlayerLevel1();
 
+
+	// --------------------------------------------------------
+	// ENEMY
+	// --------------------------------------------------------
+
 	drawEnemyLevel1();
+
+
+	// --------------------------------------------------------
+	// UI
+	// --------------------------------------------------------
 
 	drawHealthUI();
 
 	drawScoreUI();
 
 
-	// Enemy killed
+	// --------------------------------------------------------
+	// ENEMY COUNT
+	// --------------------------------------------------------
 
 	char enemyText[50];
 
@@ -599,18 +655,19 @@ void drawLevel1()
 		totalEnemies
 		);
 
-
 	iSetColor(255, 255, 255);
 
 	iText(
-		520,
-		680,
+		390,
+		555,
 		enemyText,
 		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// Wave
+	// --------------------------------------------------------
+	// WAVE
+	// --------------------------------------------------------
 
 	char waveText[50];
 
@@ -620,18 +677,20 @@ void drawLevel1()
 		currentEnemy
 		);
 
-
 	iText(
-		580,
-		630,
-		waveText
+		450,
+		515,
+		waveText,
+		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// Level
+	// --------------------------------------------------------
+	// LEVEL
+	// --------------------------------------------------------
 
 	iText(
-		365,
+		460,
 		580,
 		"LEVEL 1",
 		GLUT_BITMAP_HELVETICA_18
@@ -706,14 +765,18 @@ void updateLevel1PlayerAttack()
 	}
 
 
-	// Damage enemy
+	// --------------------------------------------------------
+	// DAMAGE ENEMY
+	// --------------------------------------------------------
 
 	enemyHealth -= attackDamage;
 
 	attackHit = true;
 
 
-	// Enemy still alive
+	// --------------------------------------------------------
+	// ENEMY STILL ALIVE
+	// --------------------------------------------------------
 
 	if (enemyHealth > 0)
 	{
@@ -721,7 +784,9 @@ void updateLevel1PlayerAttack()
 	}
 
 
-	// Enemy dead
+	// --------------------------------------------------------
+	// ENEMY DEAD
+	// --------------------------------------------------------
 
 	enemyHealth = 0;
 
@@ -735,7 +800,9 @@ void updateLevel1PlayerAttack()
 	score += scorePerEnemy;
 
 
-	// Level 1 complete
+	// --------------------------------------------------------
+	// LEVEL 1 COMPLETE
+	// --------------------------------------------------------
 
 	if (enemiesDefeated >= totalEnemies)
 	{
@@ -745,7 +812,9 @@ void updateLevel1PlayerAttack()
 	}
 
 
-	// Next enemy
+	// --------------------------------------------------------
+	// NEXT ENEMY
+	// --------------------------------------------------------
 
 	spawnNextWave();
 }
@@ -780,14 +849,18 @@ void updateLevel2PlayerAttack()
 	}
 
 
-	// Damage enemy
+	// --------------------------------------------------------
+	// DAMAGE ENEMY
+	// --------------------------------------------------------
 
 	enemyHealth -= attackDamage;
 
 	attackHit = true;
 
 
-	// Enemy still alive
+	// --------------------------------------------------------
+	// ENEMY STILL ALIVE
+	// --------------------------------------------------------
 
 	if (enemyHealth > 0)
 	{
@@ -795,7 +868,9 @@ void updateLevel2PlayerAttack()
 	}
 
 
-	// Enemy dead
+	// --------------------------------------------------------
+	// ENEMY DEAD
+	// --------------------------------------------------------
 
 	enemyHealth = 0;
 
@@ -804,14 +879,14 @@ void updateLevel2PlayerAttack()
 	enemyAttacking = false;
 
 
-	// Level 2 enemy count
-
 	level2EnemiesDefeated++;
 
 	score += scorePerEnemy;
 
 
-	// All 10 enemies killed
+	// --------------------------------------------------------
+	// ALL 10 ENEMIES KILLED
+	// --------------------------------------------------------
 
 	if (level2EnemiesDefeated >= level2TotalEnemies)
 	{
@@ -821,12 +896,11 @@ void updateLevel2PlayerAttack()
 	}
 
 
-	// Next wave
+	// --------------------------------------------------------
+	// NEXT WAVE
+	// --------------------------------------------------------
 
 	level2CurrentWave++;
-
-
-	// Spawn same enemy again
 
 	spawnEnemy();
 }
@@ -847,7 +921,9 @@ void fixedUpdateLevel1()
 	playerMoving = false;
 
 
-	// Move right
+	// --------------------------------------------------------
+	// MOVE RIGHT
+	// --------------------------------------------------------
 
 	if (isKeyPressed('d') || isKeyPressed('D'))
 	{
@@ -862,7 +938,9 @@ void fixedUpdateLevel1()
 	}
 
 
-	// Move left
+	// --------------------------------------------------------
+	// MOVE LEFT
+	// --------------------------------------------------------
 
 	if (isKeyPressed('a') || isKeyPressed('A'))
 	{
@@ -877,21 +955,27 @@ void fixedUpdateLevel1()
 	}
 
 
-	// World limit
+	// --------------------------------------------------------
+	// WORLD LIMIT
+	// --------------------------------------------------------
 
 	if (playerX < 0)
 	{
 		playerX = 0;
 	}
 
-	if (playerX > level1WorldWidth - playerWidth)
+
+	if (playerX >
+		level1WorldWidth - playerWidth)
 	{
 		playerX =
 			level1WorldWidth - playerWidth;
 	}
 
 
-	// Attack cooldown
+	// --------------------------------------------------------
+	// ATTACK COOLDOWN
+	// --------------------------------------------------------
 
 	if (attackTimer > 0)
 	{
@@ -899,17 +983,23 @@ void fixedUpdateLevel1()
 	}
 
 
-	// Attack enemy
+	// --------------------------------------------------------
+	// PLAYER ATTACK
+	// --------------------------------------------------------
 
 	updateLevel1PlayerAttack();
 
 
-	// Enemy movement
+	// --------------------------------------------------------
+	// ENEMY MOVEMENT
+	// --------------------------------------------------------
 
 	updateEnemyMovement();
 
 
-	// Camera
+	// --------------------------------------------------------
+	// CAMERA
+	// --------------------------------------------------------
 
 	if (playerX > cameraFollowX)
 	{
@@ -926,6 +1016,7 @@ void fixedUpdateLevel1()
 	{
 		cameraX = 0;
 	}
+
 
 	if (cameraX >
 		level1WorldWidth - screenWidth)
@@ -951,7 +1042,9 @@ void fixedUpdateLevel2()
 	playerMoving = false;
 
 
-	// Move right
+	// --------------------------------------------------------
+	// MOVE RIGHT
+	// --------------------------------------------------------
 
 	if (isKeyPressed('d') || isKeyPressed('D'))
 	{
@@ -966,7 +1059,9 @@ void fixedUpdateLevel2()
 	}
 
 
-	// Move left
+	// --------------------------------------------------------
+	// MOVE LEFT
+	// --------------------------------------------------------
 
 	if (isKeyPressed('a') || isKeyPressed('A'))
 	{
@@ -981,12 +1076,15 @@ void fixedUpdateLevel2()
 	}
 
 
-	// World limit
+	// --------------------------------------------------------
+	// WORLD LIMIT
+	// --------------------------------------------------------
 
 	if (playerX < 0)
 	{
 		playerX = 0;
 	}
+
 
 	if (playerX >
 		level2WorldWidth - playerWidth)
@@ -996,7 +1094,9 @@ void fixedUpdateLevel2()
 	}
 
 
-	// Attack cooldown
+	// --------------------------------------------------------
+	// ATTACK COOLDOWN
+	// --------------------------------------------------------
 
 	if (attackTimer > 0)
 	{
@@ -1004,7 +1104,9 @@ void fixedUpdateLevel2()
 	}
 
 
-	// Jump physics
+	// --------------------------------------------------------
+	// JUMP PHYSICS
+	// --------------------------------------------------------
 
 	if (isJumping)
 	{
@@ -1024,7 +1126,9 @@ void fixedUpdateLevel2()
 	}
 
 
-	// Player attack
+	// --------------------------------------------------------
+	// PLAYER ATTACK
+	// --------------------------------------------------------
 
 	updateLevel2PlayerAttack();
 
@@ -1035,12 +1139,16 @@ void fixedUpdateLevel2()
 	}
 
 
-	// Enemy movement
+	// --------------------------------------------------------
+	// ENEMY MOVEMENT
+	// --------------------------------------------------------
 
 	updateEnemyMovement();
 
 
-	// Camera
+	// --------------------------------------------------------
+	// CAMERA
+	// --------------------------------------------------------
 
 	if (playerX > cameraFollowX)
 	{
@@ -1057,6 +1165,7 @@ void fixedUpdateLevel2()
 	{
 		level2CameraX = 0;
 	}
+
 
 	if (level2CameraX >
 		level2WorldWidth - level2ScreenWidth)
@@ -1076,7 +1185,9 @@ void startLevel2()
 	gameState = 5;
 
 
-	// Player
+	// --------------------------------------------------------
+	// PLAYER
+	// --------------------------------------------------------
 
 	playerX = 150;
 
@@ -1085,7 +1196,9 @@ void startLevel2()
 	playerHealth = playerMaxHealth;
 
 
-	// Movement
+	// --------------------------------------------------------
+	// MOVEMENT
+	// --------------------------------------------------------
 
 	velocityY = 0;
 
@@ -1096,7 +1209,9 @@ void startLevel2()
 	faceRight = true;
 
 
-	// Attack
+	// --------------------------------------------------------
+	// ATTACK
+	// --------------------------------------------------------
 
 	isAttacking = false;
 
@@ -1107,19 +1222,25 @@ void startLevel2()
 	attackTimer = 0;
 
 
-	// Camera
+	// --------------------------------------------------------
+	// CAMERA
+	// --------------------------------------------------------
 
 	level2CameraX = 0;
 
 
-	// Level 2 enemy UI
+	// --------------------------------------------------------
+	// LEVEL 2 ENEMY UI
+	// --------------------------------------------------------
 
 	level2EnemiesDefeated = 0;
 
 	level2CurrentWave = 1;
 
 
-	// Spawn first enemy
+	// --------------------------------------------------------
+	// SPAWN FIRST ENEMY
+	// --------------------------------------------------------
 
 	spawnEnemy();
 }
@@ -1152,11 +1273,15 @@ void drawLevel2()
 		-(level2CameraX % level2ScreenWidth);
 
 
+	// --------------------------------------------------------
+	// BACKGROUND
+	// --------------------------------------------------------
+
 	iShowImage(
 		backgroundX,
 		0,
 		level2ScreenWidth,
-		600,
+		screenHeight,
 		level2BackgroundImage
 		);
 
@@ -1165,21 +1290,37 @@ void drawLevel2()
 		backgroundX + level2ScreenWidth,
 		0,
 		level2ScreenWidth,
-		600,
+		screenHeight,
 		level2BackgroundImage
 		);
 
 
+	// --------------------------------------------------------
+	// PLAYER
+	// --------------------------------------------------------
+
 	drawPlayerLevel2();
 
+
+	// --------------------------------------------------------
+	// ENEMY
+	// --------------------------------------------------------
+
 	drawEnemyLevel2();
+
+
+	// --------------------------------------------------------
+	// UI
+	// --------------------------------------------------------
 
 	drawHealthUI();
 
 	drawScoreUI();
 
 
-	// Enemy killed
+	// --------------------------------------------------------
+	// ENEMY COUNT
+	// --------------------------------------------------------
 
 	char enemyText[50];
 
@@ -1194,14 +1335,16 @@ void drawLevel2()
 	iSetColor(255, 255, 255);
 
 	iText(
-		520,
-		680,
+		390,
+		555,
 		enemyText,
 		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// Wave
+	// --------------------------------------------------------
+	// WAVE
+	// --------------------------------------------------------
 
 	char waveText[50];
 
@@ -1213,16 +1356,19 @@ void drawLevel2()
 
 
 	iText(
-		580,
-		630,
-		waveText
+		450,
+		515,
+		waveText,
+		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// Level
+	// --------------------------------------------------------
+	// LEVEL
+	// --------------------------------------------------------
 
 	iText(
-		365,
+		460,
 		580,
 		"LEVEL 2",
 		GLUT_BITMAP_HELVETICA_18
