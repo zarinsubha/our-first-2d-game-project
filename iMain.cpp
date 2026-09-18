@@ -465,7 +465,15 @@ int main()
 		iLoadImage(
 		"Images//background.png"
 		);
+	backgroundImage2 =
+		iLoadImage(
+		"Images//background2.png"
+		);
 
+	backgroundImage3 =
+		iLoadImage(
+		"Images//background3.png"
+		);
 
 	// ========================================================
 	// LEVEL 2 BACKGROUND
@@ -485,7 +493,7 @@ int main()
 		iLoadImage(
 		"Images//player.png"
 		);
-
+	
 
 	// ========================================================
 	// PLAYER RUN

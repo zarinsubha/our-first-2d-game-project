@@ -57,6 +57,9 @@ int cameraX = 0;
 
 const int level1WorldWidth = 3000;
 
+int backgroundImage2;
+int backgroundImage3;
+
 
 // ============================================================
 // LEVEL 2 CAMERA
@@ -587,18 +590,24 @@ void drawScoreUI()
 }
 
 
+
 // ============================================================
 // DRAW LEVEL 1
 // ============================================================
 
 void drawLevel1()
 {
-	int backgroundX =
-		-(cameraX % screenWidth);
+	// --------------------------------------------------------
+	// LEVEL 1 BACKGROUND
+	// Three different backgrounds make one long world
+	// background -> background2 -> background3
+	// --------------------------------------------------------
+
+	int backgroundX = -cameraX;
 
 
 	// --------------------------------------------------------
-	// BACKGROUND
+	// FIRST BACKGROUND
 	// --------------------------------------------------------
 
 	iShowImage(
@@ -610,12 +619,29 @@ void drawLevel1()
 		);
 
 
+	// --------------------------------------------------------
+	// SECOND BACKGROUND
+	// --------------------------------------------------------
+
 	iShowImage(
 		backgroundX + screenWidth,
 		0,
 		screenWidth,
 		screenHeight,
-		backgroundImage
+		backgroundImage2
+		);
+
+
+	// --------------------------------------------------------
+	// THIRD BACKGROUND
+	// --------------------------------------------------------
+
+	iShowImage(
+		backgroundX + (screenWidth * 2),
+		0,
+		screenWidth,
+		screenHeight,
+		backgroundImage3
 		);
 
 
@@ -634,10 +660,15 @@ void drawLevel1()
 
 
 	// --------------------------------------------------------
-	// UI
+	// HEALTH UI
 	// --------------------------------------------------------
 
 	drawHealthUI();
+
+
+	// --------------------------------------------------------
+	// SCORE UI
+	// --------------------------------------------------------
 
 	drawScoreUI();
 
@@ -696,6 +727,15 @@ void drawLevel1()
 		GLUT_BITMAP_HELVETICA_18
 		);
 }
+	
+
+	
+
+
+	
+
+
+	
 
 
 // ============================================================
