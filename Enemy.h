@@ -9,12 +9,26 @@ extern int gameState;
 // SAME ENEMY FOR LEVEL 1 AND LEVEL 2
 // ============================================================
 
+// ============================================================
+// LEVEL 1 ENEMY IMAGES
+// ============================================================
+
 int enemyImage;
 
 int enemyRunImage[3];
 
 int enemyAttackImage[2];
 
+
+// ============================================================
+// LEVEL 2 ENEMY IMAGES
+// ============================================================
+
+int enemy2Image;
+
+int enemy2RunImage[3];
+
+int enemy2AttackImage[3];
 
 // ============================================================
 // ENEMY VARIABLES
@@ -148,9 +162,22 @@ void updateEnemyAttackAnimation()
 	{
 		enemyAttackFrame++;
 
-		if (enemyAttackFrame >= 2)
+		// LEVEL 2 has 3 attack images
+		if (gameState == 5)
 		{
-			enemyAttackFrame = 0;
+			if (enemyAttackFrame >= 3)
+			{
+				enemyAttackFrame = 0;
+			}
+		}
+
+		// LEVEL 1 has 2 attack images
+		else
+		{
+			if (enemyAttackFrame >= 2)
+			{
+				enemyAttackFrame = 0;
+			}
 		}
 	}
 	else
@@ -158,8 +185,6 @@ void updateEnemyAttackAnimation()
 		enemyAttackFrame = 0;
 	}
 }
-
-
 // ============================================================
 // ENEMY DAMAGES PLAYER
 // TIMER = 1 SECOND

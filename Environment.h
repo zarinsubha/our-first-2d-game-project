@@ -14,6 +14,8 @@ void startLevel2();
 
 int menuImage;
 
+int instructionImage;
+
 int storyImage;
 
 int backgroundImage;
@@ -110,6 +112,8 @@ bool jadeCollected = false;
 
 int selectedMenuButton = 0;
 
+int instructionTimer = 0;
+
 int menuActionTimer = 0;
 
 
@@ -185,7 +189,7 @@ void resetLevel()
 	cameraX = 0;
 	// LEVEL 1 PROGRESSION
 	level1Stage = 0;
-jadeCollected = false;
+	jadeCollected = false;
 
 	// --------------------------------------------------------
 	// SCORE
@@ -225,6 +229,20 @@ void drawMenu()
 		menuImage
 		);
 }
+// ============================================================
+// INSTRUCTION PAGE
+// ============================================================
+
+void drawInstruction()
+{
+	iShowImage(
+		0,
+		0,
+		screenWidth,
+		screenHeight,
+		instructionImage
+		);
+}
 
 
 // ============================================================
@@ -245,10 +263,9 @@ void updateMenuAction()
 		return;
 	}
 
-
-	// --------------------------------------------------------
+	// ========================================================
 	// START GAME
-	// --------------------------------------------------------
+	// ========================================================
 
 	if (selectedMenuButton == 1)
 	{
@@ -256,9 +273,10 @@ void updateMenuAction()
 
 		resetLevel();
 
-		gameState = 2;
-	}
+		gameState = 7;
 
+		instructionTimer = 3000;
+	}
 
 	// --------------------------------------------------------
 	// EXIT
@@ -267,6 +285,28 @@ void updateMenuAction()
 	else if (selectedMenuButton == 5)
 	{
 		exit(0);
+	}
+}
+
+// ============================================================
+// INSTRUCTION TIMER
+// 3 SECONDS
+// ============================================================
+
+void updateInstruction()
+{
+	if (gameState != 7)
+	{
+		return;
+	}
+
+	instructionTimer -= 20;
+
+	if (instructionTimer <= 0)
+	{
+		instructionTimer = 0;
+
+		gameState = 2;
 	}
 }
 
@@ -535,8 +575,10 @@ void drawEnemyLevel1()
 }
 
 
+
 // ============================================================
 // DRAW ENEMY LEVEL 2
+// NEW ENEMY
 // ============================================================
 
 void drawEnemyLevel2()
@@ -549,6 +591,10 @@ void drawEnemyLevel2()
 	int drawX = enemyX - level2CameraX;
 
 
+	// --------------------------------------------------------
+	// ATTACK
+	// --------------------------------------------------------
+
 	if (enemyAttacking)
 	{
 		iShowImage(
@@ -556,9 +602,15 @@ void drawEnemyLevel2()
 			enemyY,
 			enemyWidth,
 			enemyHeight,
-			enemyAttackImage[enemyAttackFrame]
+			enemy2AttackImage[enemyAttackFrame]
 			);
 	}
+
+
+	// --------------------------------------------------------
+	// RUN
+	// --------------------------------------------------------
+
 	else if (abs(enemyX - playerX) > 100)
 	{
 		iShowImage(
@@ -566,9 +618,15 @@ void drawEnemyLevel2()
 			enemyY,
 			enemyWidth,
 			enemyHeight,
-			enemyRunImage[enemyRunFrame]
+			enemy2RunImage[enemyRunFrame]
 			);
 	}
+
+
+	// --------------------------------------------------------
+	// IDLE
+	// --------------------------------------------------------
+
 	else
 	{
 		iShowImage(
@@ -576,11 +634,10 @@ void drawEnemyLevel2()
 			enemyY,
 			enemyWidth,
 			enemyHeight,
-			enemyImage
+			enemy2Image
 			);
 	}
 }
-
 
 // ============================================================
 // DRAW SCORE
@@ -628,7 +685,7 @@ void drawLevel1()
 {
 	// --------------------------------------------------------
 	// LEVEL 1 BACKGROUND
-	
+
 	// --------------------------------------------------------
 
 	int backgroundX = -cameraX;
@@ -755,15 +812,15 @@ void drawLevel1()
 		GLUT_BITMAP_HELVETICA_18
 		);
 }
-	
-
-	
 
 
-	
 
 
-	
+
+
+
+
+
 
 
 // ============================================================
@@ -1314,16 +1371,18 @@ void startLevel2()
 }
 
 
-// ============================================================
-// MAIN FIXED UPDATE
-// ============================================================
-
 void fixedUpdate()
 {
-	if (gameState == 2)
+	if (gameState == 7)
+	{
+		updateInstruction();
+	}
+
+	else if (gameState == 2)
 	{
 		fixedUpdateLevel1();
 	}
+
 	else if (gameState == 5)
 	{
 		fixedUpdateLevel2();

@@ -12,7 +12,7 @@
 // 4 = WIN
 // 5 = LEVEL 2
 // 6 = LEVEL SELECT
-//
+// 7 = INSTRUCTION
 // ============================================================
 
 int gameState = 0;
@@ -105,6 +105,11 @@ void iDraw()
 	else if (gameState == 6)
 	{
 		drawLevelSelect();
+	}
+
+	else if (gameState == 7)
+	{
+		drawInstruction();
 	}
 }
 
@@ -415,7 +420,14 @@ int main()
 		iLoadImage(
 		"Images//menu.png"
 		);
+	// ============================================================
+	// INSTRUCTION
+	// ============================================================
 
+	instructionImage =
+		iLoadImage(
+		"Images//instruction.png"
+		);
 
 	// ========================================================
 	// LEVEL SELECT
@@ -584,7 +596,54 @@ int main()
 		iLoadImage(
 		"Images//enemy_attack_2.png"
 		);
+	// ============================================================
+	// LEVEL 2 ENEMY IDLE
+	// ============================================================
 
+	enemy2Image =
+		iLoadImage(
+		"Images//enemy2_idle.png"
+		);
+
+
+	// ============================================================
+	// LEVEL 2 ENEMY RUN
+	// ============================================================
+
+	enemy2RunImage[0] =
+		iLoadImage(
+		"Images//enemy2_run1.png"
+		);
+
+	enemy2RunImage[1] =
+		iLoadImage(
+		"Images//enemy2_run2.png"
+		);
+
+	enemy2RunImage[2] =
+		iLoadImage(
+		"Images//enemy2_run3.png"
+		);
+
+
+	// ============================================================
+	// LEVEL 2 ENEMY ATTACK
+	// ============================================================
+
+	enemy2AttackImage[0] =
+		iLoadImage(
+		"Images//enemy2_attack1.png"
+		);
+
+	enemy2AttackImage[1] =
+		iLoadImage(
+		"Images//enemy2_attack2.png"
+		);
+
+	enemy2AttackImage[2] =
+		iLoadImage(
+		"Images//enemy2_attack3.png"
+		);
 
 	// ========================================================
 	// UI
