@@ -3,8 +3,6 @@
 
 // ============================================================
 // GAME STATE
-// ============================================================
-//
 // 0 = MENU
 // 1 = STORY
 // 2 = LEVEL 1
@@ -12,8 +10,6 @@
 // 4 = WIN
 // 5 = LEVEL 2
 // 6 = LEVEL SELECT
-//
-// ============================================================
 
 int gameState = 0;
 
@@ -76,9 +72,6 @@ void iDraw()
 	{
 		drawGameOver();
 	}
-
-
-	// ========================================================
 	// WIN
 	// ========================================================
 
@@ -196,8 +189,7 @@ void iMouse(
 
 		// ----------------------------------------------------
 		// STORY
-		// Original: 110-485, 130-200
-		// Resized: 86-379, 108-167
+		
 		// ----------------------------------------------------
 
 		else if (
@@ -260,8 +252,7 @@ void iMouse(
 
 		// ----------------------------------------------------
 		// LEVEL 2
-		// Original: 470-825, 145-525
-		// Resized: 367-645, 121-438
+		
 		// ----------------------------------------------------
 
 		else if (
@@ -277,11 +268,7 @@ void iMouse(
 
 		// ----------------------------------------------------
 		// BACK TO MENU
-		// Original: 990-1215, 40-105
-		// Resized: 773-949, 33-88
-		// ----------------------------------------------------
-
-		else if (
+else if (
 			mx >= 773 &&
 			mx <= 949 &&
 			my >= 33 &&
@@ -293,10 +280,7 @@ void iMouse(
 			selectedMenuButton = 0;
 		}
 	}
-
-
-	// ========================================================
-	// PLAYER ATTACK
+// PLAYER ATTACK
 	// LEVEL 1 AND LEVEL 2
 	// ========================================================
 
@@ -611,14 +595,27 @@ int main()
 		0,
 		NULL
 		);
-
+	mciSendString(
+		"open \"Audios//attack.wav\" alias attacksound",
+		NULL, 0, NULL
+		);
 
 	mciSendString(
-		"open \"Audios//gameover.mp3\" alias ggsong",
-		NULL,
-		0,
-		NULL
+		"open \"Audios//enemy_hit.wav\" alias enemyhitsound",
+		NULL, 0, NULL
 		);
+
+	mciSendString(
+		"open \"Audios//victory.wav\" alias victorysound",
+		NULL, 0, NULL
+		);
+
+	mciSendString(
+		"open \"Audios//win.wav\" alias winsound",
+		NULL, 0, NULL
+		);
+
+	
 
 
 	// ========================================================
