@@ -1,4 +1,4 @@
-﻿Build started 9/18/2026 7:58:30 PM.
+﻿Build started 9/19/2026 10:18:44 AM.
      1>Project "E:\New folder\our-first-2d-game-project\Ch2_Urmi2.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(381,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Ch1.vcxproj, ch2.vcxproj, TheLastJadeMarquis.vcxproj, TheLastJadeMrquis.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
@@ -11,4 +11,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.44
+Time Elapsed 00:00:01.66

@@ -75,7 +75,34 @@ const int level2WorldWidth = 4000;
 // Camera starts following player after this position
 
 const int cameraFollowX = 400;
+// ============================================================
+// LEVEL 1 PROGRESSION
+// ============================================================
+//
+// 0 = FIGHTING 10 ENEMIES
+// 1 = GO TO DOOR
+// 2 = GO TO JADE
+// 3 = JADE COLLECTED
+//
+// ============================================================
 
+int level1Stage = 0;
+
+
+// Door position in Level 1 world
+const int level1DoorX = 1800;
+
+
+// Jade position in Level 1 world
+const int jadeX = 2500;
+
+
+// Jade image
+int jadeImage;
+
+
+// Jade collected
+bool jadeCollected = false;
 
 // ============================================================
 // MENU
@@ -156,7 +183,9 @@ void resetLevel()
 	// --------------------------------------------------------
 
 	cameraX = 0;
-
+	// LEVEL 1 PROGRESSION
+	level1Stage = 0;
+jadeCollected = false;
 
 	// --------------------------------------------------------
 	// SCORE
@@ -599,8 +628,7 @@ void drawLevel1()
 {
 	// --------------------------------------------------------
 	// LEVEL 1 BACKGROUND
-	// Three different backgrounds make one long world
-	// background -> background2 -> background3
+	
 	// --------------------------------------------------------
 
 	int backgroundX = -cameraX;

@@ -21,7 +21,7 @@ int enemyAttackImage[2];
 // ============================================================
 
 int enemyX = 1100;
-int enemyY = 180;
+int enemyY = groundY;
 
 int enemyWidth = 158;
 int enemyHeight = 150;

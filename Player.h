@@ -69,7 +69,7 @@ const int gravity = 1;
 
 const int jumpPower = 18;
 
-const int groundY = 180;
+const int groundY = 130;
 
 
 // ============================================================
