@@ -63,13 +63,12 @@ int level3BackgroundImage5;
 int winImage;
 
 int gameoverImage;
-
 int heartImage;
 
 int coinImage;
 
 int levelSelectImage;
-
+int healthbarImage;
 
 // ============================================================
 // SCORE
@@ -429,25 +428,69 @@ void drawLevelSelect()
 		levelSelectImage
 		);
 }
-
-
 // ============================================================
 // HEALTH UI
 // ============================================================
 
 void drawHealthUI()
 {
+	int x = 20;
+	int y = 545;
+	int width = 260;
+	int height = 30;
+
+	// Draw healthbar image
 	iShowImage(
-		20,
-		545,
-		35,
-		35,
-		heartImage
+		x,
+		y,
+		width,
+		height,
+		healthbarImage
 		);
 
+	// Calculate health percentage
+	float healthPercent = 0.0f;
 
+	if (playerMaxHealth > 0)
+	{
+		healthPercent =
+			(float)playerHealth /
+			(float)playerMaxHealth;
+	}
+
+	if (healthPercent < 0.0f)
+	{
+		healthPercent = 0.0f;
+	}
+
+	if (healthPercent > 1.0f)
+	{
+		healthPercent = 1.0f;
+	}
+
+	// Empty part of the health bar
+	int fillX = x + 65;
+	int fillY = y + 7;
+	int fillWidth = 175;
+	int fillHeight = 16;
+
+	int currentFillWidth =
+		(int)(fillWidth * healthPercent);
+
+	if (currentFillWidth < fillWidth)
+	{
+		iSetColor(20, 30, 20);
+
+		iFilledRectangle(
+			fillX + currentFillWidth,
+			fillY,
+			fillWidth - currentFillWidth,
+			fillHeight
+			);
+	}
+
+	// Health number
 	char healthText[20];
-
 
 	sprintf_s(
 		healthText,
@@ -455,59 +498,19 @@ void drawHealthUI()
 		playerHealth
 		);
 
-
 	iSetColor(
 		255,
 		255,
 		255
 		);
 
-
 	iText(
-		65,
-		555,
+		x + 95,
+		y + 8,
 		healthText,
 		GLUT_BITMAP_HELVETICA_18
 		);
-
-
-	iSetColor(
-		80,
-		0,
-		0
-		);
-
-
-	iFilledRectangle(
-		20,
-		520,
-		200,
-		15
-		);
-
-
-	iSetColor(
-		0,
-		255,
-		0
-		);
-
-
-	int healthBarWidth =
-		(playerHealth * 200) /
-		playerMaxHealth;
-
-
-	iFilledRectangle(
-		20,
-		520,
-		healthBarWidth,
-		15
-		);
 }
-
-
-// ============================================================
 // PLAYER LEVEL 1
 // ============================================================
 
@@ -1175,7 +1178,13 @@ void updateLevel1PlayerAttack()
 	enemyHealth -= attackDamage;
 
 	attackHit = true;
-
+	// PLAY ENEMY HIT SOUND
+	mciSendString(
+		"play enemyhitsound from 0",
+		NULL,
+		0,
+		NULL
+		);
 
 	if (enemyHealth > 0)
 	{
@@ -1848,7 +1857,22 @@ void fixedUpdateLevel1()
 			jadeCollected = true;
 
 			level1Stage = 3;
+			// STOP BACKGROUND MUSIC
+			mciSendString(
+				"stop bgsong",
+				NULL,
+				0,
+				NULL
+				);
 
+
+			// PLAY VICTORY SOUND
+			mciSendString(
+				"play victorysound from 0",
+				NULL,
+				0,
+				NULL
+				);
 			gameState = 4;
 
 			playerMoving = false;
@@ -2844,7 +2868,22 @@ void fixedUpdateLevel3()
 			// ==================================================
 			// LEVEL 3 COMPLETE
 			// ==================================================
+			// STOP BACKGROUND MUSIC
+			mciSendString(
+				"stop bgsong",
+				NULL,
+				0,
+				NULL
+				);
 
+
+			// PLAY VICTORY SOUND
+			mciSendString(
+				"play victorysound from 0",
+				NULL,
+				0,
+				NULL
+				);
 			gameState = 4;
 
 			playerMoving = false;

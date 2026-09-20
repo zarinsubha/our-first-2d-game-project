@@ -6,10 +6,6 @@ extern int gameState;
 
 // ============================================================
 // LEVEL 2 ENEMY PLATFORM
-// ============================================================
-// Enemy.h is included before Environment.h.
-// So we do NOT use level2PlatformY here.
-// ============================================================
 
 const int level2EnemyPlatformY = 105;
 
@@ -396,15 +392,27 @@ void enemyAttackUpdate()
 		playerHealth = 0;
 
 		enemyAttacking = false;
+		// STOP BACKGROUND MUSIC
+		mciSendString(
+			"stop bgsong",
+			NULL,
+			0,
+			NULL
+			);
 
-		gameState = 3;
 
+		// PLAY GAME OVER SOUND
 		mciSendString(
 			"play ggsong from 0",
 			NULL,
 			0,
 			NULL
 			);
+
+
+		gameState = 3;
+
+		
 	}
 }
 

@@ -239,6 +239,13 @@ void iMouse(
 			attackHit = false;
 
 			attackTimer = 20;
+			// PLAY ATTACK SOUND
+			mciSendString(
+				"play attacksound from 0",
+				NULL,
+				0,
+				NULL
+				);
 		}
 	}
 }
@@ -262,6 +269,29 @@ void iKeyboard(unsigned char key)
 			gameState == 4
 			)
 		{
+
+			// STOP VICTORY / GAME OVER SOUND
+			mciSendString(
+				"stop victorysound",
+				NULL,
+				0,
+				NULL
+				);
+
+			mciSendString(
+				"stop ggsong",
+				NULL,
+				0,
+				NULL
+				);
+			// RESTART BACKGROUND MUSIC
+			mciSendString(
+				"play bgsong repeat",
+				NULL,
+				0,
+				NULL
+				);
+
 			gameState = 0;
 
 			selectedMenuButton = 0;
@@ -648,22 +678,20 @@ int main()
 	// ========================================================
 	// HUD
 	// ========================================================
-
-	heartImage =
-		iLoadImage(
-		"Images//heart.png"
+	healthbarImage = iLoadImage(
+		"Images//healthbar.png"
 		);
+
 
 	coinImage =
 		iLoadImage(
 		"Images//coin.png"
 		);
-
-
 	// ========================================================
 	// AUDIO
 	// ========================================================
 
+	// BACKGROUND MUSIC
 	mciSendString(
 		"open \"Audios//background.mp3\" alias bgsong",
 		NULL,
@@ -671,6 +699,8 @@ int main()
 		NULL
 		);
 
+
+	// PLAYER ATTACK SOUND
 	mciSendString(
 		"open \"Audios//attack.wav\" alias attacksound",
 		NULL,
@@ -678,6 +708,8 @@ int main()
 		NULL
 		);
 
+
+	// ENEMY HIT SOUND
 	mciSendString(
 		"open \"Audios//enemy_hit.wav\" alias enemyhitsound",
 		NULL,
@@ -685,6 +717,8 @@ int main()
 		NULL
 		);
 
+
+	// VICTORY SOUND
 	mciSendString(
 		"open \"Audios//victory.wav\" alias victorysound",
 		NULL,
@@ -692,15 +726,8 @@ int main()
 		NULL
 		);
 
-	mciSendString(
-		"open \"Audios//win.wav\" alias winsound",
-		NULL,
-		0,
-		NULL
-		);
 
-
-	// Game over sound
+	// GAME OVER SOUND
 	mciSendString(
 		"open \"Audios//gameover.mp3\" alias ggsong",
 		NULL,
@@ -709,14 +736,13 @@ int main()
 		);
 
 
+	// START BACKGROUND MUSIC
 	mciSendString(
 		"play bgsong repeat",
 		NULL,
 		0,
 		NULL
 		);
-
-
 	// ========================================================
 	// TIMERS
 	// ========================================================
