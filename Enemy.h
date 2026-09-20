@@ -7,12 +7,18 @@ extern int gameState;
 // ============================================================
 // LEVEL 2 ENEMY PLATFORM
 // ============================================================
-// IMPORTANT:
 // Enemy.h is included before Environment.h.
 // So we do NOT use level2PlatformY here.
 // ============================================================
 
 const int level2EnemyPlatformY = 105;
+
+
+// ============================================================
+// LEVEL 3 ENEMY PLATFORM
+// ============================================================
+
+const int level3EnemyPlatformY = 105;
 
 
 // ============================================================
@@ -46,6 +52,28 @@ int level2Enemy1Image;
 int level2Enemy1RunImage[3];
 
 int level2Enemy1AttackImage[3];
+
+
+// ============================================================
+// LEVEL 3 - FIRST ENEMY TYPE
+// ============================================================
+
+int level3Enemy1Image;
+
+int level3Enemy1RunImage[3];
+
+int level3Enemy1AttackImage[2];
+
+
+// ============================================================
+// LEVEL 3 - SECOND ENEMY TYPE
+// ============================================================
+
+int level3Enemy2Image;
+
+int level3Enemy2RunImage[3];
+
+int level3Enemy2AttackImage[2];
 
 
 // ============================================================
@@ -110,6 +138,22 @@ const int level2FirstEnemyCount = 5;
 const int level2TotalEnemies = 10;
 
 int level2EnemiesDefeated = 0;
+
+
+// ============================================================
+// LEVEL 3 ENEMY SYSTEM
+// ============================================================
+
+// 0 = First enemy type
+// 1 = Second enemy type
+
+int level3EnemyType = 0;
+
+const int level3FirstEnemyCount = 5;
+
+const int level3TotalEnemies = 10;
+
+int level3EnemiesDefeated = 0;
 
 
 // ============================================================
@@ -191,6 +235,50 @@ void spawnLevel2Enemy1()
 
 
 // ============================================================
+// LEVEL 3 FIRST ENEMY TYPE
+// ============================================================
+
+void spawnLevel3Enemy1()
+{
+	enemyHealth = 100;
+
+	enemyAlive = true;
+
+	enemyAttacking = false;
+
+	enemyRunFrame = 0;
+
+	enemyAttackFrame = 0;
+
+	enemyX = playerX + 450;
+
+	enemyY = level3EnemyPlatformY;
+}
+
+
+// ============================================================
+// LEVEL 3 SECOND ENEMY TYPE
+// ============================================================
+
+void spawnLevel3Enemy2()
+{
+	enemyHealth = 100;
+
+	enemyAlive = true;
+
+	enemyAttacking = false;
+
+	enemyRunFrame = 0;
+
+	enemyAttackFrame = 0;
+
+	enemyX = playerX + 450;
+
+	enemyY = level3EnemyPlatformY;
+}
+
+
+// ============================================================
 // ENEMY RUN ANIMATION
 // ============================================================
 
@@ -198,7 +286,8 @@ void updateEnemyAnimation()
 {
 	if (
 		gameState != 2 &&
-		gameState != 5
+		gameState != 5 &&
+		gameState != 7
 		)
 	{
 		enemyRunFrame = 0;
@@ -235,7 +324,8 @@ void updateEnemyAttackAnimation()
 {
 	if (
 		gameState != 2 &&
-		gameState != 5
+		gameState != 5 &&
+		gameState != 7
 		)
 	{
 		enemyAttackFrame = 0;
@@ -251,9 +341,22 @@ void updateEnemyAttackAnimation()
 	{
 		enemyAttackFrame++;
 
-		if (enemyAttackFrame >= 3)
+		// Level 2 has 3 attack images.
+		// Level 1 and Level 3 have 2 attack images.
+
+		if (gameState == 5)
 		{
-			enemyAttackFrame = 0;
+			if (enemyAttackFrame >= 3)
+			{
+				enemyAttackFrame = 0;
+			}
+		}
+		else
+		{
+			if (enemyAttackFrame >= 2)
+			{
+				enemyAttackFrame = 0;
+			}
 		}
 	}
 	else
@@ -271,7 +374,8 @@ void enemyAttackUpdate()
 {
 	if (
 		gameState != 2 &&
-		gameState != 5
+		gameState != 5 &&
+		gameState != 7
 		)
 	{
 		return;

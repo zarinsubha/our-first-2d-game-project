@@ -108,7 +108,8 @@ void updatePlayerAnimation()
 {
 	if (
 		gameState != 2 &&
-		gameState != 5
+		gameState != 5 &&
+		gameState != 7
 		)
 	{
 		runFrame = 0;
@@ -152,7 +153,8 @@ void updateAttackAnimation()
 {
 	if (
 		gameState != 2 &&
-		gameState != 5
+		gameState != 5 &&
+		gameState != 7
 		)
 	{
 		attackFrame = 0;

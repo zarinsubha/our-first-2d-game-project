@@ -11,6 +11,7 @@
 // 4 = WIN
 // 5 = LEVEL 2
 // 6 = LEVEL SELECT
+// 7 = LEVEL 3
 //
 
 int gameState = 0;
@@ -60,6 +61,10 @@ void iDraw()
 	else if (gameState == 6)
 	{
 		drawLevelSelect();
+	}
+	else if (gameState == 7)
+	{
+		drawLevel3();
 	}
 }
 
@@ -213,12 +218,13 @@ void iMouse(
 
 	// ========================================================
 	// ATTACK
-	// LEVEL 1 + LEVEL 2
+	// LEVEL 1 + LEVEL 2 + LEVEL 3
 	// ========================================================
 
 	else if (
 		gameState == 2 ||
-		gameState == 5
+		gameState == 5 ||
+		gameState == 7
 		)
 	{
 		if (
@@ -380,6 +386,36 @@ int main()
 
 
 	// ========================================================
+	// LEVEL 3 BACKGROUNDS
+	// ========================================================
+
+	level3BackgroundImage1 =
+		iLoadImage(
+		"Images//level3_background1.png"
+		);
+
+	level3BackgroundImage2 =
+		iLoadImage(
+		"Images//level3_background2.png"
+		);
+
+	level3BackgroundImage3 =
+		iLoadImage(
+		"Images//level3_background3.png"
+		);
+
+	level3BackgroundImage4 =
+		iLoadImage(
+		"Images//level3_background4.png"
+		);
+
+	level3BackgroundImage5 =
+		iLoadImage(
+		"Images//level3_background5.png"
+		);
+
+
+	// ========================================================
 	// PLAYER
 	// ========================================================
 
@@ -387,7 +423,6 @@ int main()
 		iLoadImage(
 		"Images//player.png"
 		);
-
 
 	runImage[0] =
 		iLoadImage(
@@ -403,7 +438,6 @@ int main()
 		iLoadImage(
 		"Images//run_3.png"
 		);
-
 
 	attackImage[0] =
 		iLoadImage(
@@ -538,6 +572,76 @@ int main()
 	level2Enemy1AttackImage[2] =
 		iLoadImage(
 		"Images//level2_enemy1_attack3.png"
+		);
+
+
+	// ========================================================
+	// LEVEL 3 - FIRST ENEMY TYPE
+	// ========================================================
+
+	level3Enemy1Image =
+		iLoadImage(
+		"Images//level3_enemy1_idle.png"
+		);
+
+	level3Enemy1RunImage[0] =
+		iLoadImage(
+		"Images//level3_enemy1_run1.png"
+		);
+
+	level3Enemy1RunImage[1] =
+		iLoadImage(
+		"Images//level3_enemy1_run2.png"
+		);
+
+	level3Enemy1RunImage[2] =
+		iLoadImage(
+		"Images//level3_enemy1_run3.png"
+		);
+
+	level3Enemy1AttackImage[0] =
+		iLoadImage(
+		"Images//level3_enemy1_attack1.png"
+		);
+
+	level3Enemy1AttackImage[1] =
+		iLoadImage(
+		"Images//level3_enemy1_attack2.png"
+		);
+
+
+	// ========================================================
+	// LEVEL 3 - SECOND ENEMY TYPE
+	// ========================================================
+
+	level3Enemy2Image =
+		iLoadImage(
+		"Images//level3_enemy2_idle.png"
+		);
+
+	level3Enemy2RunImage[0] =
+		iLoadImage(
+		"Images//level3_enemy2_run1.png"
+		);
+
+	level3Enemy2RunImage[1] =
+		iLoadImage(
+		"Images//level3_enemy2_run2.png"
+		);
+
+	level3Enemy2RunImage[2] =
+		iLoadImage(
+		"Images//level3_enemy2_run3.png"
+		);
+
+	level3Enemy2AttackImage[0] =
+		iLoadImage(
+		"Images//level3_enemy2_attack1.png"
+		);
+
+	level3Enemy2AttackImage[1] =
+		iLoadImage(
+		"Images//level3_enemy2_attack2.png"
 		);
 
 
