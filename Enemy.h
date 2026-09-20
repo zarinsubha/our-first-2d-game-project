@@ -5,8 +5,18 @@ extern int gameState;
 
 
 // ============================================================
-// ENEMY IMAGES
-// SAME ENEMY FOR LEVEL 1 AND LEVEL 2
+// LEVEL 2 ENEMY PLATFORM
+// ============================================================
+// IMPORTANT:
+// Enemy.h is included before Environment.h.
+// So we do NOT use level2PlatformY here.
+// ============================================================
+
+const int level2EnemyPlatformY = 105;
+
+
+// ============================================================
+// LEVEL 1 ENEMY IMAGES
 // ============================================================
 
 int enemyImage;
@@ -17,13 +27,37 @@ int enemyAttackImage[2];
 
 
 // ============================================================
+// LEVEL 2 - FIRST ENEMY TYPE
+// ============================================================
+
+int level2EnemyImage;
+
+int level2EnemyRunImage[3];
+
+int level2EnemyAttackImage[3];
+
+
+// ============================================================
+// LEVEL 2 - SECOND ENEMY TYPE
+// ============================================================
+
+int level2Enemy1Image;
+
+int level2Enemy1RunImage[3];
+
+int level2Enemy1AttackImage[3];
+
+
+// ============================================================
 // ENEMY VARIABLES
 // ============================================================
 
 int enemyX = 1100;
+
 int enemyY = groundY;
 
 int enemyWidth = 158;
+
 int enemyHeight = 150;
 
 int enemySpeed = 2;
@@ -63,8 +97,23 @@ int currentEnemy = 1;
 
 
 // ============================================================
-// SPAWN ENEMY
-// SAME ENEMY USED FOR BOTH LEVELS
+// LEVEL 2 ENEMY SYSTEM
+// ============================================================
+
+// 0 = First enemy type
+// 1 = Second enemy type
+
+int level2EnemyType = 0;
+
+const int level2FirstEnemyCount = 5;
+
+const int level2TotalEnemies = 10;
+
+int level2EnemiesDefeated = 0;
+
+
+// ============================================================
+// LEVEL 1 SPAWN
 // ============================================================
 
 void spawnEnemy()
@@ -79,9 +128,6 @@ void spawnEnemy()
 
 	enemyAttackFrame = 0;
 
-
-	// Spawn from right side
-
 	enemyX = 1100;
 
 	enemyY = groundY;
@@ -89,7 +135,7 @@ void spawnEnemy()
 
 
 // ============================================================
-// SPAWN NEXT LEVEL 1 WAVE
+// LEVEL 1 NEXT WAVE
 // ============================================================
 
 void spawnNextWave()
@@ -101,16 +147,65 @@ void spawnNextWave()
 
 
 // ============================================================
+// LEVEL 2 FIRST ENEMY TYPE
+// ============================================================
+
+void spawnLevel2Enemy()
+{
+	enemyHealth = 100;
+
+	enemyAlive = true;
+
+	enemyAttacking = false;
+
+	enemyRunFrame = 0;
+
+	enemyAttackFrame = 0;
+
+	enemyX = playerX + 450;
+
+	enemyY = level2EnemyPlatformY;
+}
+
+
+// ============================================================
+// LEVEL 2 SECOND ENEMY TYPE
+// ============================================================
+
+void spawnLevel2Enemy1()
+{
+	enemyHealth = 100;
+
+	enemyAlive = true;
+
+	enemyAttacking = false;
+
+	enemyRunFrame = 0;
+
+	enemyAttackFrame = 0;
+
+	enemyX = playerX + 450;
+
+	enemyY = level2EnemyPlatformY;
+}
+
+
+// ============================================================
 // ENEMY RUN ANIMATION
 // ============================================================
 
 void updateEnemyAnimation()
 {
-	if (gameState != 2 && gameState != 5)
+	if (
+		gameState != 2 &&
+		gameState != 5
+		)
 	{
 		enemyRunFrame = 0;
+
 		return;
 	}
+
 
 	if (
 		enemyAlive &&
@@ -138,17 +233,25 @@ void updateEnemyAnimation()
 
 void updateEnemyAttackAnimation()
 {
-	if (gameState != 2 && gameState != 5)
+	if (
+		gameState != 2 &&
+		gameState != 5
+		)
 	{
 		enemyAttackFrame = 0;
+
 		return;
 	}
 
-	if (enemyAlive && enemyAttacking)
+
+	if (
+		enemyAlive &&
+		enemyAttacking
+		)
 	{
 		enemyAttackFrame++;
 
-		if (enemyAttackFrame >= 2)
+		if (enemyAttackFrame >= 3)
 		{
 			enemyAttackFrame = 0;
 		}
@@ -161,26 +264,28 @@ void updateEnemyAttackAnimation()
 
 
 // ============================================================
-// ENEMY DAMAGES PLAYER
-// TIMER = 1 SECOND
+// ENEMY ATTACK UPDATE
 // ============================================================
 
 void enemyAttackUpdate()
 {
-	if (gameState != 2 && gameState != 5)
+	if (
+		gameState != 2 &&
+		gameState != 5
+		)
 	{
 		return;
 	}
 
-	if (enemyAlive && enemyAttacking)
+
+	if (
+		enemyAlive &&
+		enemyAttacking
+		)
 	{
 		playerHealth -= enemyAttackDamage;
 	}
 
-
-	// ========================================================
-	// PLAYER DEAD
-	// ========================================================
 
 	if (playerHealth <= 0)
 	{

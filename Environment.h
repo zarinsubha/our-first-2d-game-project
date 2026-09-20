@@ -1,8 +1,9 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
+
 // ============================================================
-// FORWARD DECLARATIONS
+// FUNCTION DECLARATIONS
 // ============================================================
 
 void startLevel2();
@@ -30,7 +31,15 @@ int backgroundImage2;
 
 int backgroundImage3;
 
-int level2BackgroundImage;
+
+// LEVEL 2 BACKGROUNDS
+
+int level2BackgroundImage1;
+
+int level2BackgroundImage2;
+
+int level2BackgroundImage3;
+
 
 int winImage;
 
@@ -53,7 +62,7 @@ const int scorePerEnemy = 5;
 
 
 // ============================================================
-// SCREEN SIZE
+// SCREEN
 // ============================================================
 
 const int screenWidth = 1000;
@@ -78,23 +87,13 @@ int level2CameraX = 0;
 
 const int level2ScreenWidth = 1000;
 
-const int level2WorldWidth = 4000;
+const int level2WorldWidth = 3000;
 
 const int cameraFollowX = 400;
 
 
 // ============================================================
-// LEVEL 1 PLATFORM POSITIONS
-// ============================================================
-//
-// IMPORTANT:
-//
-// iShowImage() uses the BOTTOM-LEFT corner.
-//
-// Therefore playerY is the player's FEET position.
-//
-// Do NOT subtract playerHeight.
-//
+// LEVEL 1 PLATFORM
 // ============================================================
 
 const int level1PlatformY1 = 135;
@@ -105,33 +104,60 @@ const int level1PlatformY3 = 135;
 
 
 // ============================================================
-// LEVEL 1 PROGRESSION
+// LEVEL 2 PLATFORM
 // ============================================================
-//
-// 0 = FIGHTING 10 ENEMIES
-// 1 = GO TO DOOR
-// 2 = GO TO JADE
-// 3 = JADE COLLECTED
-//
+
+const int level2PlatformY = 105;
+
+
 // ============================================================
+// LEVEL 1 STAGE
+// ============================================================
+
+// 0 = Fight
+// 1 = Door
+// 2 = Jade
 
 int level1Stage = 0;
 
 
 // ============================================================
-// LEVEL 1 DOOR
+// LEVEL 1 DOOR + JADE
 // ============================================================
 
 const int level1DoorX = 500;
 
-
-// ============================================================
-// LEVEL 1 JADE
-// ============================================================
-
 const int jadeX = 800;
 
 bool jadeCollected = false;
+
+
+// ============================================================
+// LEVEL 2 STAGE
+// ============================================================
+
+// 0 = First 5 enemies
+// 1 = Second 5 enemies
+// 2 = Background 2 + Gate
+// 3 = Background 3 + Jade
+
+int level2Stage = 0;
+
+
+// ============================================================
+// LEVEL 2 GATE + JADE
+// ============================================================
+
+const int level2DoorX = 330;
+
+const int level2JadeX = 500;
+
+
+// ============================================================
+// LEVEL 2 ENEMY COUNT
+// ============================================================
+
+int level2CurrentWave = 1;
 
 
 // ============================================================
@@ -153,23 +179,7 @@ int mouseY = 0;
 
 
 // ============================================================
-// LEVEL 2 ENEMY SYSTEM
-// ============================================================
-
-const int level2TotalEnemies = 10;
-
-int level2EnemiesDefeated = 0;
-
-int level2CurrentWave = 1;
-
-
-// ============================================================
-// LEVEL 1 PLATFORM HELPER
-// ============================================================
-//
-// This function puts the player's FEET exactly on the
-// correct platform for the current Level 1 stage.
-//
+// LEVEL 1 PLATFORM POSITION
 // ============================================================
 
 void setLevel1PlayerOnPlatform()
@@ -195,10 +205,6 @@ void setLevel1PlayerOnPlatform()
 
 void resetLevel()
 {
-	// --------------------------------------------------------
-	// PLAYER
-	// --------------------------------------------------------
-
 	playerX = 150;
 
 	level1Stage = 0;
@@ -214,10 +220,6 @@ void resetLevel()
 	runFrame = 0;
 
 
-	// --------------------------------------------------------
-	// ATTACK
-	// --------------------------------------------------------
-
 	isAttacking = false;
 
 	attackFrame = 0;
@@ -227,55 +229,31 @@ void resetLevel()
 	attackTimer = 0;
 
 
-	// --------------------------------------------------------
-	// JUMP
-	// --------------------------------------------------------
-
 	isJumping = false;
 
 	velocityY = 0;
 
 
-	// --------------------------------------------------------
-	// CAMERA
-	// --------------------------------------------------------
-
 	cameraX = 0;
 
-
-	// --------------------------------------------------------
-	// LEVEL 1 PROGRESSION
-	// --------------------------------------------------------
 
 	jadeCollected = false;
 
 
-	// --------------------------------------------------------
-	// SCORE
-	// --------------------------------------------------------
-
 	score = 0;
 
-
-	// --------------------------------------------------------
-	// ENEMY SYSTEM
-	// --------------------------------------------------------
 
 	enemiesDefeated = 0;
 
 	currentEnemy = 1;
 
 
-	// --------------------------------------------------------
-	// SPAWN FIRST ENEMY
-	// --------------------------------------------------------
-
 	spawnEnemy();
 }
 
 
 // ============================================================
-// MENU DRAW
+// MENU
 // ============================================================
 
 void drawMenu()
@@ -301,17 +279,15 @@ void updateMenuAction()
 		return;
 	}
 
+
 	menuActionTimer--;
+
 
 	if (menuActionTimer != 0)
 	{
 		return;
 	}
 
-
-	// --------------------------------------------------------
-	// START GAME
-	// --------------------------------------------------------
 
 	if (selectedMenuButton == 1)
 	{
@@ -321,12 +297,6 @@ void updateMenuAction()
 
 		gameState = 2;
 	}
-
-
-	// --------------------------------------------------------
-	// EXIT
-	// --------------------------------------------------------
-
 	else if (selectedMenuButton == 5)
 	{
 		exit(0);
@@ -415,6 +385,7 @@ void drawHealthUI()
 
 	char healthText[20];
 
+
 	sprintf_s(
 		healthText,
 		"%d",
@@ -460,7 +431,8 @@ void drawHealthUI()
 
 
 	int healthBarWidth =
-		(playerHealth * 200) / playerMaxHealth;
+		(playerHealth * 200) /
+		playerMaxHealth;
 
 
 	iFilledRectangle(
@@ -473,12 +445,13 @@ void drawHealthUI()
 
 
 // ============================================================
-// DRAW PLAYER LEVEL 1
+// PLAYER LEVEL 1
 // ============================================================
 
 void drawPlayerLevel1()
 {
-	int drawX = playerX - cameraX;
+	int drawX =
+		playerX - cameraX;
 
 
 	if (isAttacking)
@@ -491,7 +464,10 @@ void drawPlayerLevel1()
 			attackImage[attackFrame]
 			);
 	}
-	else if (playerMoving && !isJumping)
+	else if (
+		playerMoving &&
+		!isJumping
+		)
 	{
 		iShowImage(
 			drawX,
@@ -515,12 +491,13 @@ void drawPlayerLevel1()
 
 
 // ============================================================
-// DRAW PLAYER LEVEL 2
+// PLAYER LEVEL 2
 // ============================================================
 
 void drawPlayerLevel2()
 {
-	int drawX = playerX - level2CameraX;
+	int drawX =
+		playerX - level2CameraX;
 
 
 	if (isAttacking)
@@ -533,7 +510,10 @@ void drawPlayerLevel2()
 			attackImage[attackFrame]
 			);
 	}
-	else if (playerMoving && !isJumping)
+	else if (
+		playerMoving &&
+		!isJumping
+		)
 	{
 		iShowImage(
 			drawX,
@@ -557,7 +537,7 @@ void drawPlayerLevel2()
 
 
 // ============================================================
-// DRAW ENEMY LEVEL 1
+// LEVEL 1 ENEMY DRAW
 // ============================================================
 
 void drawEnemyLevel1()
@@ -568,7 +548,8 @@ void drawEnemyLevel1()
 	}
 
 
-	int drawX = enemyX - cameraX;
+	int drawX =
+		enemyX - cameraX;
 
 
 	if (enemyAttacking)
@@ -578,17 +559,23 @@ void drawEnemyLevel1()
 			enemyY,
 			enemyWidth,
 			enemyHeight,
-			enemyAttackImage[enemyAttackFrame]
+			enemyAttackImage[
+				enemyAttackFrame
+			]
 			);
 	}
-	else if (abs(enemyX - playerX) > 100)
+	else if (
+		abs(enemyX - playerX) > 100
+		)
 	{
 		iShowImage(
 			drawX,
 			enemyY,
 			enemyWidth,
 			enemyHeight,
-			enemyRunImage[enemyRunFrame]
+			enemyRunImage[
+				enemyRunFrame
+			]
 			);
 	}
 	else
@@ -605,7 +592,7 @@ void drawEnemyLevel1()
 
 
 // ============================================================
-// DRAW ENEMY LEVEL 2
+// LEVEL 2 ENEMY DRAW
 // ============================================================
 
 void drawEnemyLevel2()
@@ -616,44 +603,103 @@ void drawEnemyLevel2()
 	}
 
 
-	int drawX = enemyX - level2CameraX;
+	int drawX =
+		enemyX - level2CameraX;
 
 
-	if (enemyAttacking)
+	// ========================================================
+	// FIRST ENEMY TYPE
+	// ========================================================
+
+	if (level2EnemyType == 0)
 	{
-		iShowImage(
-			drawX,
-			enemyY,
-			enemyWidth,
-			enemyHeight,
-			enemyAttackImage[enemyAttackFrame]
-			);
+		if (enemyAttacking)
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2EnemyAttackImage[
+					enemyAttackFrame
+				]
+				);
+		}
+		else if (
+			abs(enemyX - playerX) > 100
+			)
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2EnemyRunImage[
+					enemyRunFrame
+				]
+				);
+		}
+		else
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2EnemyImage
+				);
+		}
 	}
-	else if (abs(enemyX - playerX) > 100)
-	{
-		iShowImage(
-			drawX,
-			enemyY,
-			enemyWidth,
-			enemyHeight,
-			enemyRunImage[enemyRunFrame]
-			);
-	}
+
+
+	// ========================================================
+	// SECOND ENEMY TYPE
+	// ========================================================
+
 	else
 	{
-		iShowImage(
-			drawX,
-			enemyY,
-			enemyWidth,
-			enemyHeight,
-			enemyImage
-			);
+		if (enemyAttacking)
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2Enemy1AttackImage[
+					enemyAttackFrame
+				]
+				);
+		}
+		else if (
+			abs(enemyX - playerX) > 100
+			)
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2Enemy1RunImage[
+					enemyRunFrame
+				]
+				);
+		}
+		else
+		{
+			iShowImage(
+				drawX,
+				enemyY,
+				enemyWidth,
+				enemyHeight,
+				level2Enemy1Image
+				);
+		}
 	}
 }
 
 
 // ============================================================
-// DRAW SCORE
+// SCORE UI
 // ============================================================
 
 void drawScoreUI()
@@ -668,6 +714,7 @@ void drawScoreUI()
 
 
 	char scoreText[20];
+
 
 	sprintf_s(
 		scoreText,
@@ -693,26 +740,15 @@ void drawScoreUI()
 
 
 // ============================================================
-// DRAW LEVEL 1
-// ============================================================
-//
-// STAGE 0 = background1 scrolling
-// STAGE 1 = background2 static
-// STAGE 2 = background3 static
-//
+// LEVEL 1 DRAW
 // ============================================================
 
 void drawLevel1()
 {
-	// ========================================================
-	// STAGE 0
-	// BACKGROUND 1
-	// SCROLLING
-	// ========================================================
-
 	if (level1Stage == 0)
 	{
-		int backgroundX = -cameraX;
+		int backgroundX =
+			-cameraX;
 
 
 		iShowImage(
@@ -734,21 +770,14 @@ void drawLevel1()
 
 
 		iShowImage(
-			backgroundX + (screenWidth * 2),
+			backgroundX +
+			(screenWidth * 2),
 			0,
 			screenWidth,
 			screenHeight,
 			backgroundImage
 			);
 	}
-
-
-	// ========================================================
-	// STAGE 1
-	// BACKGROUND 2
-	// STATIC
-	// ========================================================
-
 	else if (level1Stage == 1)
 	{
 		cameraX = 0;
@@ -762,14 +791,6 @@ void drawLevel1()
 			backgroundImage2
 			);
 	}
-
-
-	// ========================================================
-	// STAGE 2
-	// BACKGROUND 3
-	// STATIC
-	// ========================================================
-
 	else if (level1Stage == 2)
 	{
 		cameraX = 0;
@@ -785,17 +806,8 @@ void drawLevel1()
 	}
 
 
-	// ========================================================
-	// PLAYER
-	// ========================================================
-
 	drawPlayerLevel1();
 
-
-	// ========================================================
-	// ENEMY
-	// ONLY STAGE 0
-	// ========================================================
 
 	if (level1Stage == 0)
 	{
@@ -803,25 +815,13 @@ void drawLevel1()
 	}
 
 
-	// ========================================================
-	// HEALTH
-	// ========================================================
-
 	drawHealthUI();
-
-
-	// ========================================================
-	// SCORE
-	// ========================================================
 
 	drawScoreUI();
 
 
-	// ========================================================
-	// ENEMY COUNT
-	// ========================================================
-
 	char enemyText[50];
+
 
 	sprintf_s(
 		enemyText,
@@ -845,10 +845,6 @@ void drawLevel1()
 		GLUT_BITMAP_HELVETICA_18
 		);
 
-
-	// ========================================================
-	// STAGE MESSAGE
-	// ========================================================
 
 	if (level1Stage == 0)
 	{
@@ -878,10 +874,6 @@ void drawLevel1()
 			);
 	}
 
-
-	// ========================================================
-	// LEVEL
-	// ========================================================
 
 	iText(
 		460,
@@ -964,10 +956,6 @@ void updateLevel1PlayerAttack()
 	}
 
 
-	// --------------------------------------------------------
-	// DAMAGE
-	// --------------------------------------------------------
-
 	enemyHealth -= attackDamage;
 
 	attackHit = true;
@@ -978,10 +966,6 @@ void updateLevel1PlayerAttack()
 		return;
 	}
 
-
-	// --------------------------------------------------------
-	// ENEMY DEAD
-	// --------------------------------------------------------
 
 	enemyHealth = 0;
 
@@ -995,35 +979,20 @@ void updateLevel1PlayerAttack()
 
 
 	// ========================================================
-	// ALL 10 ENEMIES KILLED
+	// ALL 10 ENEMIES DEFEATED
 	// ========================================================
 
 	if (enemiesDefeated >= totalEnemies)
 	{
 		enemiesDefeated = totalEnemies;
 
-
-		// ----------------------------------------------------
-		// GO TO BACKGROUND 2
-		// ----------------------------------------------------
-
 		level1Stage = 1;
 
 		cameraX = 0;
 
-
-		// ----------------------------------------------------
-		// PLAYER START POSITION
-		// ----------------------------------------------------
-
 		playerX = 100;
 
 		setLevel1PlayerOnPlatform();
-
-
-		// ----------------------------------------------------
-		// PLAYER STATE
-		// ----------------------------------------------------
 
 		playerMoving = false;
 
@@ -1039,23 +1008,13 @@ void updateLevel1PlayerAttack()
 
 		velocityY = 0;
 
-
-		// ----------------------------------------------------
-		// NO ENEMY
-		// ----------------------------------------------------
-
 		enemyAlive = false;
 
 		enemyAttacking = false;
 
-
 		return;
 	}
 
-
-	// ========================================================
-	// NEXT ENEMY
-	// ========================================================
 
 	spawnNextWave();
 }
@@ -1063,7 +1022,6 @@ void updateLevel1PlayerAttack()
 
 // ============================================================
 // LEVEL 2 PLAYER ATTACK
-// ORIGINAL LEVEL 2 SYSTEM
 // ============================================================
 
 void updateLevel2PlayerAttack()
@@ -1114,17 +1072,86 @@ void updateLevel2PlayerAttack()
 	score += scorePerEnemy;
 
 
-	if (level2EnemiesDefeated >= level2TotalEnemies)
+	// ========================================================
+	// AFTER FIRST 5 ENEMIES
+	// SECOND ENEMY TYPE STARTS
+	// ========================================================
+
+	if (
+		level2EnemiesDefeated ==
+		level2FirstEnemyCount
+		)
 	{
-		gameState = 4;
+		level2Stage = 1;
+
+		level2EnemyType = 1;
+
+		level2CurrentWave = 6;
+
+		spawnLevel2Enemy1();
 
 		return;
 	}
 
 
-	level2CurrentWave++;
+	// ========================================================
+	// AFTER TOTAL 10 ENEMIES
+	// GO TO BACKGROUND 2
+	// ========================================================
 
-	spawnEnemy();
+	if (
+		level2EnemiesDefeated >=
+		level2TotalEnemies
+		)
+	{
+		level2EnemiesDefeated =
+			level2TotalEnemies;
+
+
+		level2Stage = 2;
+
+		enemyAlive = false;
+
+		level2CameraX = 0;
+
+		playerX = 100;
+
+		playerY = level2PlatformY;
+
+		playerMoving = false;
+
+		isAttacking = false;
+
+		attackHit = false;
+
+		attackTimer = 0;
+
+		faceRight = true;
+
+		isJumping = false;
+
+		velocityY = 0;
+
+		return;
+	}
+
+
+	// ========================================================
+	// NEXT ENEMY
+	// ========================================================
+
+	if (level2EnemyType == 0)
+	{
+		level2CurrentWave++;
+
+		spawnLevel2Enemy();
+	}
+	else
+	{
+		level2CurrentWave++;
+
+		spawnLevel2Enemy1();
+	}
 }
 
 
@@ -1144,17 +1171,15 @@ void fixedUpdateLevel1()
 
 
 	// ========================================================
-	// STAGE 0
-	// FIGHT
+	// FIGHT STAGE
 	// ========================================================
 
 	if (level1Stage == 0)
 	{
-		// ----------------------------------------------------
-		// MOVE RIGHT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('d') || isKeyPressed('D'))
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1167,11 +1192,10 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// MOVE LEFT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('a') || isKeyPressed('A'))
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1184,44 +1208,32 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// WORLD LIMIT
-		// ----------------------------------------------------
-
 		if (playerX < 0)
 		{
 			playerX = 0;
 		}
 
 
-		if (playerX >
-			level1WorldWidth - playerWidth)
+		if (
+			playerX >
+			level1WorldWidth -
+			playerWidth
+			)
 		{
 			playerX =
-				level1WorldWidth - playerWidth;
+				level1WorldWidth -
+				playerWidth;
 		}
 
 
-		// ----------------------------------------------------
-		// PLATFORM
-		// ----------------------------------------------------
-
 		setLevel1PlayerOnPlatform();
 
-
-		// ----------------------------------------------------
-		// ATTACK COOLDOWN
-		// ----------------------------------------------------
 
 		if (attackTimer > 0)
 		{
 			attackTimer--;
 		}
 
-
-		// ----------------------------------------------------
-		// ATTACK
-		// ----------------------------------------------------
 
 		updateLevel1PlayerAttack();
 
@@ -1232,21 +1244,14 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// ENEMY
-		// ----------------------------------------------------
-
 		updateEnemyMovement();
 
-
-		// ----------------------------------------------------
-		// CAMERA
-		// ----------------------------------------------------
 
 		if (playerX > cameraFollowX)
 		{
 			cameraX =
-				playerX - cameraFollowX;
+				playerX -
+				cameraFollowX;
 		}
 		else
 		{
@@ -1260,11 +1265,15 @@ void fixedUpdateLevel1()
 		}
 
 
-		if (cameraX >
-			level1WorldWidth - screenWidth)
+		if (
+			cameraX >
+			level1WorldWidth -
+			screenWidth
+			)
 		{
 			cameraX =
-				level1WorldWidth - screenWidth;
+				level1WorldWidth -
+				screenWidth;
 		}
 
 
@@ -1273,9 +1282,7 @@ void fixedUpdateLevel1()
 
 
 	// ========================================================
-	// STAGE 1
-	// BACKGROUND 2
-	// GO TO DOOR
+	// LEVEL 1 DOOR
 	// ========================================================
 
 	if (level1Stage == 1)
@@ -1283,11 +1290,10 @@ void fixedUpdateLevel1()
 		cameraX = 0;
 
 
-		// ----------------------------------------------------
-		// MOVE RIGHT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('d') || isKeyPressed('D'))
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1300,11 +1306,10 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// MOVE LEFT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('a') || isKeyPressed('A'))
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1317,37 +1322,31 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// SCREEN LIMIT
-		// ----------------------------------------------------
-
 		if (playerX < 0)
 		{
 			playerX = 0;
 		}
 
 
-		if (playerX >
-			screenWidth - playerWidth)
+		if (
+			playerX >
+			screenWidth -
+			playerWidth
+			)
 		{
 			playerX =
-				screenWidth - playerWidth;
+				screenWidth -
+				playerWidth;
 		}
 
 
-		// ----------------------------------------------------
-		// PLAYER ON BACKGROUND 2 PLATFORM
-		// ----------------------------------------------------
+		playerY =
+			level1PlatformY2;
 
-		playerY = level1PlatformY2;
-
-
-		// ----------------------------------------------------
-		// DOOR COLLISION
-		// ----------------------------------------------------
 
 		int playerCenter =
-			playerX + (playerWidth / 2);
+			playerX +
+			(playerWidth / 2);
 
 
 		int doorDistance =
@@ -1359,27 +1358,14 @@ void fixedUpdateLevel1()
 
 		if (doorDistance <= 80)
 		{
-			// ------------------------------------------------
-			// GO TO BACKGROUND 3
-			// ------------------------------------------------
-
 			level1Stage = 2;
 
 			cameraX = 0;
 
-
-			// ------------------------------------------------
-			// PLAYER START
-			// ------------------------------------------------
-
 			playerX = 100;
 
-			playerY = level1PlatformY3;
-
-
-			// ------------------------------------------------
-			// PLAYER STATE
-			// ------------------------------------------------
+			playerY =
+				level1PlatformY3;
 
 			playerMoving = false;
 
@@ -1402,9 +1388,7 @@ void fixedUpdateLevel1()
 
 
 	// ========================================================
-	// STAGE 2
-	// BACKGROUND 3
-	// GET JADE
+	// LEVEL 1 JADE
 	// ========================================================
 
 	if (level1Stage == 2)
@@ -1412,11 +1396,10 @@ void fixedUpdateLevel1()
 		cameraX = 0;
 
 
-		// ----------------------------------------------------
-		// MOVE RIGHT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('d') || isKeyPressed('D'))
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1429,11 +1412,10 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// MOVE LEFT
-		// ----------------------------------------------------
-
-		if (isKeyPressed('a') || isKeyPressed('A'))
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
 		{
 			if (!isAttacking)
 			{
@@ -1446,37 +1428,31 @@ void fixedUpdateLevel1()
 		}
 
 
-		// ----------------------------------------------------
-		// SCREEN LIMIT
-		// ----------------------------------------------------
-
 		if (playerX < 0)
 		{
 			playerX = 0;
 		}
 
 
-		if (playerX >
-			screenWidth - playerWidth)
+		if (
+			playerX >
+			screenWidth -
+			playerWidth
+			)
 		{
 			playerX =
-				screenWidth - playerWidth;
+				screenWidth -
+				playerWidth;
 		}
 
 
-		// ----------------------------------------------------
-		// PLAYER ON BACKGROUND 3 PLATFORM
-		// ----------------------------------------------------
+		playerY =
+			level1PlatformY3;
 
-		playerY = level1PlatformY3;
-
-
-		// ----------------------------------------------------
-		// JADE COLLISION
-		// ----------------------------------------------------
 
 		int playerCenter =
-			playerX + (playerWidth / 2);
+			playerX +
+			(playerWidth / 2);
 
 
 		int jadeDistance =
@@ -1492,13 +1468,7 @@ void fixedUpdateLevel1()
 
 			level1Stage = 3;
 
-
-			// ------------------------------------------------
-			// WIN
-			// ------------------------------------------------
-
 			gameState = 4;
-
 
 			playerMoving = false;
 
@@ -1507,7 +1477,6 @@ void fixedUpdateLevel1()
 			attackHit = false;
 
 			attackTimer = 0;
-
 
 			return;
 		}
@@ -1520,7 +1489,6 @@ void fixedUpdateLevel1()
 
 // ============================================================
 // LEVEL 2 UPDATE
-// ORIGINAL LEVEL 2 SYSTEM
 // ============================================================
 
 void fixedUpdateLevel2()
@@ -1534,136 +1502,386 @@ void fixedUpdateLevel2()
 	playerMoving = false;
 
 
-	// --------------------------------------------------------
-	// MOVE RIGHT
-	// --------------------------------------------------------
+	// ========================================================
+	// STAGE 0 + STAGE 1
+	// FIRST 5 + SECOND 5 ENEMIES
+	// ========================================================
 
-	if (isKeyPressed('d') || isKeyPressed('D'))
+	if (
+		level2Stage == 0 ||
+		level2Stage == 1
+		)
 	{
-		if (!isAttacking)
+		// RIGHT
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
 		{
-			playerX += playerSpeed;
+			if (!isAttacking)
+			{
+				playerX += playerSpeed;
 
-			playerMoving = true;
+				playerMoving = true;
 
-			faceRight = true;
+				faceRight = true;
+			}
 		}
-	}
 
 
-	// --------------------------------------------------------
-	// MOVE LEFT
-	// --------------------------------------------------------
-
-	if (isKeyPressed('a') || isKeyPressed('A'))
-	{
-		if (!isAttacking)
+		// LEFT
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
 		{
-			playerX -= playerSpeed;
+			if (!isAttacking)
+			{
+				playerX -= playerSpeed;
 
-			playerMoving = true;
+				playerMoving = true;
 
-			faceRight = false;
+				faceRight = false;
+			}
 		}
-	}
 
 
-	// --------------------------------------------------------
-	// WORLD LIMIT
-	// --------------------------------------------------------
-
-	if (playerX < 0)
-	{
-		playerX = 0;
-	}
-
-
-	if (playerX >
-		level2WorldWidth - playerWidth)
-	{
-		playerX =
-			level2WorldWidth - playerWidth;
-	}
-
-
-	// --------------------------------------------------------
-	// ATTACK COOLDOWN
-	// --------------------------------------------------------
-
-	if (attackTimer > 0)
-	{
-		attackTimer--;
-	}
-
-
-	// --------------------------------------------------------
-	// JUMP PHYSICS
-	// --------------------------------------------------------
-
-	if (isJumping)
-	{
-		velocityY -= gravity;
-
-		playerY += velocityY;
-
-
-		if (playerY <= groundY)
+		if (playerX < 0)
 		{
-			playerY = groundY;
-
-			velocityY = 0;
-
-			isJumping = false;
+			playerX = 0;
 		}
-	}
 
 
-	// --------------------------------------------------------
-	// PLAYER ATTACK
-	// --------------------------------------------------------
+		if (
+			playerX >
+			level2WorldWidth -
+			playerWidth
+			)
+		{
+			playerX =
+				level2WorldWidth -
+				playerWidth;
+		}
 
-	updateLevel2PlayerAttack();
+
+		// ====================================================
+		// JUMP
+		// ====================================================
+
+		if (isJumping)
+		{
+			velocityY -= gravity;
+
+			playerY += velocityY;
 
 
-	if (gameState != 5)
-	{
+			if (
+				playerY <=
+				level2PlatformY
+				)
+			{
+				playerY =
+					level2PlatformY;
+
+				velocityY = 0;
+
+				isJumping = false;
+			}
+		}
+		else
+		{
+			playerY =
+				level2PlatformY;
+		}
+
+
+		// ====================================================
+		// ATTACK TIMER
+		// ====================================================
+
+		if (attackTimer > 0)
+		{
+			attackTimer--;
+		}
+
+
+		// ====================================================
+		// PLAYER ATTACK
+		// ====================================================
+
+		updateLevel2PlayerAttack();
+
+
+		if (gameState != 5)
+		{
+			return;
+		}
+
+
+		// ====================================================
+		// ENEMY PLATFORM
+		// ====================================================
+
+		if (enemyAlive)
+		{
+			enemyY =
+				level2PlatformY;
+		}
+
+
+		// ====================================================
+		// ENEMY MOVEMENT
+		// ====================================================
+
+		updateEnemyMovement();
+
+
+		// ====================================================
+		// CAMERA
+		// ====================================================
+
+		if (playerX > cameraFollowX)
+		{
+			level2CameraX =
+				playerX -
+				cameraFollowX;
+		}
+		else
+		{
+			level2CameraX = 0;
+		}
+
+
+		if (level2CameraX < 0)
+		{
+			level2CameraX = 0;
+		}
+
+
+		if (
+			level2CameraX >
+			level2WorldWidth -
+			level2ScreenWidth
+			)
+		{
+			level2CameraX =
+				level2WorldWidth -
+				level2ScreenWidth;
+		}
+
+
 		return;
 	}
 
 
-	// --------------------------------------------------------
-	// ENEMY MOVEMENT
-	// --------------------------------------------------------
+	// ========================================================
+	// STAGE 2
+	// BACKGROUND 2 + GATE
+	// ========================================================
 
-	updateEnemyMovement();
-
-
-	// --------------------------------------------------------
-	// CAMERA
-	// --------------------------------------------------------
-
-	if (playerX > cameraFollowX)
-	{
-		level2CameraX =
-			playerX - cameraFollowX;
-	}
-	else
+	if (level2Stage == 2)
 	{
 		level2CameraX = 0;
+
+		enemyAlive = false;
+
+
+		// RIGHT
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
+		{
+			if (!isAttacking)
+			{
+				playerX += playerSpeed;
+
+				playerMoving = true;
+
+				faceRight = true;
+			}
+		}
+
+
+		// LEFT
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
+		{
+			if (!isAttacking)
+			{
+				playerX -= playerSpeed;
+
+				playerMoving = true;
+
+				faceRight = false;
+			}
+		}
+
+
+		if (playerX < 0)
+		{
+			playerX = 0;
+		}
+
+
+		if (
+			playerX >
+			screenWidth -
+			playerWidth
+			)
+		{
+			playerX =
+				screenWidth -
+				playerWidth;
+		}
+
+
+		playerY =
+			level2PlatformY;
+
+
+		int playerCenter =
+			playerX +
+			(playerWidth / 2);
+
+
+		int doorDistance =
+			abs(
+			playerCenter -
+			level2DoorX
+			);
+
+
+		if (doorDistance <= 80)
+		{
+			level2Stage = 3;
+
+			level2CameraX = 0;
+
+			playerX = 100;
+
+			playerY =
+				level2PlatformY;
+
+			playerMoving = false;
+
+			isAttacking = false;
+
+			attackHit = false;
+
+			attackTimer = 0;
+
+			faceRight = true;
+
+			isJumping = false;
+
+			velocityY = 0;
+		}
+
+
+		return;
 	}
 
 
-	if (level2CameraX < 0)
+	// ========================================================
+	// STAGE 3
+	// BACKGROUND 3 + JADE
+	// ========================================================
+
+	if (level2Stage == 3)
 	{
 		level2CameraX = 0;
-	}
+
+		enemyAlive = false;
 
 
-	if (level2CameraX >
-		level2WorldWidth - level2ScreenWidth)
-	{
-		level2CameraX =
-			level2WorldWidth - level2ScreenWidth;
+		// RIGHT
+		if (
+			isKeyPressed('d') ||
+			isKeyPressed('D')
+			)
+		{
+			if (!isAttacking)
+			{
+				playerX += playerSpeed;
+
+				playerMoving = true;
+
+				faceRight = true;
+			}
+		}
+
+
+		// LEFT
+		if (
+			isKeyPressed('a') ||
+			isKeyPressed('A')
+			)
+		{
+			if (!isAttacking)
+			{
+				playerX -= playerSpeed;
+
+				playerMoving = true;
+
+				faceRight = false;
+			}
+		}
+
+
+		if (playerX < 0)
+		{
+			playerX = 0;
+		}
+
+
+		if (
+			playerX >
+			screenWidth -
+			playerWidth
+			)
+		{
+			playerX =
+				screenWidth -
+				playerWidth;
+		}
+
+
+		playerY =
+			level2PlatformY;
+
+
+		int playerCenter =
+			playerX +
+			(playerWidth / 2);
+
+
+		int jadeDistance =
+			abs(
+			playerCenter -
+			level2JadeX
+			);
+
+
+		if (jadeDistance <= 90)
+		{
+			gameState = 4;
+
+			playerMoving = false;
+
+			isAttacking = false;
+
+			attackHit = false;
+
+			attackTimer = 0;
+
+			return;
+		}
+
+
+		return;
 	}
 }
 
@@ -1677,20 +1895,15 @@ void startLevel2()
 	gameState = 5;
 
 
-	// --------------------------------------------------------
-	// PLAYER
-	// --------------------------------------------------------
-
 	playerX = 150;
 
-	playerY = groundY;
+	playerY =
+		level2PlatformY;
 
-	playerHealth = playerMaxHealth;
 
+	playerHealth =
+		playerMaxHealth;
 
-	// --------------------------------------------------------
-	// MOVEMENT
-	// --------------------------------------------------------
 
 	velocityY = 0;
 
@@ -1701,10 +1914,6 @@ void startLevel2()
 	faceRight = true;
 
 
-	// --------------------------------------------------------
-	// ATTACK
-	// --------------------------------------------------------
-
 	isAttacking = false;
 
 	attackFrame = 0;
@@ -1714,32 +1923,35 @@ void startLevel2()
 	attackTimer = 0;
 
 
-	// --------------------------------------------------------
-	// CAMERA
-	// --------------------------------------------------------
-
 	level2CameraX = 0;
 
 
-	// --------------------------------------------------------
-	// LEVEL 2 ENEMY UI
-	// --------------------------------------------------------
+	// ========================================================
+	// RESET LEVEL 2
+	// ========================================================
 
 	level2EnemiesDefeated = 0;
 
 	level2CurrentWave = 1;
 
+	level2Stage = 0;
 
-	// --------------------------------------------------------
-	// SPAWN FIRST ENEMY
-	// --------------------------------------------------------
+	level2EnemyType = 0;
 
-	spawnEnemy();
+
+	score = 0;
+
+
+	// ========================================================
+	// FIRST ENEMY TYPE
+	// ========================================================
+
+	spawnLevel2Enemy();
 }
 
 
 // ============================================================
-// MAIN FIXED UPDATE
+// FIXED UPDATE
 // ============================================================
 
 void fixedUpdate()
@@ -1757,65 +1969,102 @@ void fixedUpdate()
 
 // ============================================================
 // DRAW LEVEL 2
-// ORIGINAL LEVEL 2 SYSTEM
 // ============================================================
 
 void drawLevel2()
 {
-	int backgroundX =
-		-(level2CameraX % level2ScreenWidth);
+	// ========================================================
+	// STAGE 0 + STAGE 1
+	// BACKGROUND 1
+	// ========================================================
+
+	if (
+		level2Stage == 0 ||
+		level2Stage == 1
+		)
+	{
+		int backgroundX =
+			-(level2CameraX %
+			level2ScreenWidth);
 
 
-	// --------------------------------------------------------
-	// BACKGROUND
-	// --------------------------------------------------------
-
-	iShowImage(
-		backgroundX,
-		0,
-		level2ScreenWidth,
-		screenHeight,
-		level2BackgroundImage
-		);
+		iShowImage(
+			backgroundX,
+			0,
+			level2ScreenWidth,
+			screenHeight,
+			level2BackgroundImage1
+			);
 
 
-	iShowImage(
-		backgroundX + level2ScreenWidth,
-		0,
-		level2ScreenWidth,
-		screenHeight,
-		level2BackgroundImage
-		);
+		iShowImage(
+			backgroundX +
+			level2ScreenWidth,
+			0,
+			level2ScreenWidth,
+			screenHeight,
+			level2BackgroundImage1
+			);
 
 
-	// --------------------------------------------------------
-	// PLAYER
-	// --------------------------------------------------------
+		drawPlayerLevel2();
 
-	drawPlayerLevel2();
-
-
-	// --------------------------------------------------------
-	// ENEMY
-	// --------------------------------------------------------
-
-	drawEnemyLevel2();
+		drawEnemyLevel2();
+	}
 
 
-	// --------------------------------------------------------
-	// UI
-	// --------------------------------------------------------
+	// ========================================================
+	// STAGE 2
+	// BACKGROUND 2 + GATE
+	// ========================================================
+
+	else if (level2Stage == 2)
+	{
+		iShowImage(
+			0,
+			0,
+			screenWidth,
+			screenHeight,
+			level2BackgroundImage2
+			);
+
+
+		drawPlayerLevel2();
+	}
+
+
+	// ========================================================
+	// STAGE 3
+	// BACKGROUND 3 + JADE
+	// ========================================================
+
+	else if (level2Stage == 3)
+	{
+		iShowImage(
+			0,
+			0,
+			screenWidth,
+			screenHeight,
+			level2BackgroundImage3
+			);
+
+
+		drawPlayerLevel2();
+	}
+
+
+	// ========================================================
+	// HUD
+	// ========================================================
 
 	drawHealthUI();
 
 	drawScoreUI();
 
 
-	// --------------------------------------------------------
-	// ENEMY COUNT
-	// --------------------------------------------------------
-
+	// Enemy count
 	char enemyText[50];
+
 
 	sprintf_s(
 		enemyText,
@@ -1840,30 +2089,47 @@ void drawLevel2()
 		);
 
 
-	// --------------------------------------------------------
-	// WAVE
-	// --------------------------------------------------------
+	// ========================================================
+	// ENEMY TYPE TEXT
+	// ========================================================
 
-	char waveText[50];
+	char typeText[50];
 
-	sprintf_s(
-		waveText,
-		"Wave: %d",
-		level2CurrentWave
-		);
+
+	if (level2Stage == 0)
+	{
+		sprintf_s(
+			typeText,
+			"Enemy Type: 1"
+			);
+	}
+	else if (level2Stage == 1)
+	{
+		sprintf_s(
+			typeText,
+			"Enemy Type: 2"
+			);
+	}
+	else
+	{
+		sprintf_s(
+			typeText,
+			""
+			);
+	}
 
 
 	iText(
-		450,
+		430,
 		515,
-		waveText,
+		typeText,
 		GLUT_BITMAP_HELVETICA_18
 		);
 
 
-	// --------------------------------------------------------
-	// LEVEL
-	// --------------------------------------------------------
+	// ========================================================
+	// LEVEL NAME
+	// ========================================================
 
 	iText(
 		460,

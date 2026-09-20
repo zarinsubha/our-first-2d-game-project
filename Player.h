@@ -3,26 +3,49 @@
 
 extern int gameState;
 
+
 // ============================================================
-// PLAYER VARIABLES
+// PLAYER POSITION
 // ============================================================
 
 int playerX = 150;
+
 int playerY = 180;
 
+
+// ============================================================
+// PLAYER SIZE
+// ============================================================
+
 int playerWidth = 158;
+
 int playerHeight = 150;
 
+
+// ============================================================
+// PLAYER SPEED
+// ============================================================
+
 int playerSpeed = 8;
+
+
+// ============================================================
+// PLAYER DIRECTION
+// ============================================================
 
 bool faceRight = true;
 
 
 // ============================================================
-// PLAYER IMAGES
+// PLAYER IMAGE
 // ============================================================
 
 int playerImage;
+
+
+// ============================================================
+// RUN ANIMATION
+// ============================================================
 
 int runImage[3];
 
@@ -32,7 +55,7 @@ bool playerMoving = false;
 
 
 // ============================================================
-// PLAYER ATTACK
+// ATTACK ANIMATION
 // ============================================================
 
 int attackImage[4];
@@ -49,7 +72,7 @@ bool attackHit = false;
 
 
 // ============================================================
-// PLAYER HEALTH
+// HEALTH
 // ============================================================
 
 int playerHealth = 20;
@@ -69,31 +92,43 @@ const int gravity = 1;
 
 const int jumpPower = 18;
 
+
+// ============================================================
+// LEVEL 1 GROUND
+// ============================================================
+
 const int groundY = 130;
 
 
 // ============================================================
-// PLAYER RUN ANIMATION
-// WORKS IN LEVEL 1 AND LEVEL 2
+// PLAYER ANIMATION UPDATE
 // ============================================================
 
 void updatePlayerAnimation()
 {
-	if (gameState != 2 && gameState != 5)
+	if (
+		gameState != 2 &&
+		gameState != 5
+		)
 	{
 		runFrame = 0;
+
 		return;
 	}
 
-	// Do not run while attacking
 
 	if (isAttacking)
 	{
 		runFrame = 0;
+
 		return;
 	}
 
-	if (playerMoving && !isJumping)
+
+	if (
+		playerMoving &&
+		!isJumping
+		)
 	{
 		runFrame++;
 
@@ -110,20 +145,25 @@ void updatePlayerAnimation()
 
 
 // ============================================================
-// PLAYER ATTACK ANIMATION
-// WORKS IN LEVEL 1 AND LEVEL 2
+// ATTACK ANIMATION UPDATE
 // ============================================================
 
 void updateAttackAnimation()
 {
-	if (gameState != 2 && gameState != 5)
+	if (
+		gameState != 2 &&
+		gameState != 5
+		)
 	{
 		attackFrame = 0;
+
 		isAttacking = false;
+
 		attackHit = false;
 
 		return;
 	}
+
 
 	if (isAttacking)
 	{

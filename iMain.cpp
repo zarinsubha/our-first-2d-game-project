@@ -1,8 +1,9 @@
 #include "iGraphics.h"
 
-
 // ============================================================
 // GAME STATE
+// ============================================================
+//
 // 0 = MENU
 // 1 = STORY
 // 2 = LEVEL 1
@@ -10,6 +11,7 @@
 // 4 = WIN
 // 5 = LEVEL 2
 // 6 = LEVEL SELECT
+//
 
 int gameState = 0;
 
@@ -19,9 +21,7 @@ int gameState = 0;
 // ============================================================
 
 #include "Player.h"
-
 #include "Enemy.h"
-
 #include "Environment.h"
 
 
@@ -33,68 +33,30 @@ void iDraw()
 {
 	iClear();
 
-
-	// ========================================================
-	// MENU
-	// ========================================================
-
 	if (gameState == 0)
 	{
 		drawMenu();
 	}
-
-
-	// ========================================================
-	// STORY
-	// ========================================================
-
 	else if (gameState == 1)
 	{
 		drawStory();
 	}
-
-
-	// ========================================================
-	// LEVEL 1
-	// ========================================================
-
 	else if (gameState == 2)
 	{
 		drawLevel1();
 	}
-
-
-	// ========================================================
-	// GAME OVER
-	// ========================================================
-
 	else if (gameState == 3)
 	{
 		drawGameOver();
 	}
-	// WIN
-	// ========================================================
-
 	else if (gameState == 4)
 	{
 		drawWin();
 	}
-
-
-	// ========================================================
-	// LEVEL 2
-	// ========================================================
-
 	else if (gameState == 5)
 	{
 		drawLevel2();
 	}
-
-
-	// ========================================================
-	// LEVEL SELECT
-	// ========================================================
-
 	else if (gameState == 6)
 	{
 		drawLevelSelect();
@@ -109,15 +71,12 @@ void iDraw()
 void iMouseMove(int mx, int my)
 {
 	mouseX = mx;
-
 	mouseY = my;
 }
-
 
 void iPassiveMouseMove(int mx, int my)
 {
 	mouseX = mx;
-
 	mouseY = my;
 }
 
@@ -133,7 +92,6 @@ void iMouse(
 	int my
 	)
 {
-	// Only react to LEFT mouse button press
 	if (
 		button != GLUT_LEFT_BUTTON ||
 		state != GLUT_DOWN
@@ -149,12 +107,7 @@ void iMouse(
 
 	if (gameState == 0)
 	{
-		// ----------------------------------------------------
-		// START GAME
-		// Original: 110-485, 355-420
-		// Resized: 86-379, 296-350
-		// ----------------------------------------------------
-
+		// PLAY
 		if (
 			mx >= 86 &&
 			mx <= 379 &&
@@ -168,12 +121,7 @@ void iMouse(
 		}
 
 
-		// ----------------------------------------------------
 		// LEVEL SELECT
-		// Original: 110-485, 280-350
-		// Resized: 86-379, 233-292
-		// ----------------------------------------------------
-
 		else if (
 			mx >= 86 &&
 			mx <= 379 &&
@@ -187,11 +135,7 @@ void iMouse(
 		}
 
 
-		// ----------------------------------------------------
 		// STORY
-		
-		// ----------------------------------------------------
-
 		else if (
 			mx >= 86 &&
 			mx <= 379 &&
@@ -205,12 +149,7 @@ void iMouse(
 		}
 
 
-		// ----------------------------------------------------
 		// EXIT
-		// Original: 110-485, 60-130
-		// Resized: 86-379, 50-108
-		// ----------------------------------------------------
-
 		else if (
 			mx >= 86 &&
 			mx <= 379 &&
@@ -231,12 +170,7 @@ void iMouse(
 
 	else if (gameState == 6)
 	{
-		// ----------------------------------------------------
 		// LEVEL 1
-		// Original: 95-435, 145-525
-		// Resized: 74-340, 121-438
-		// ----------------------------------------------------
-
 		if (
 			mx >= 74 &&
 			mx <= 340 &&
@@ -250,11 +184,7 @@ void iMouse(
 		}
 
 
-		// ----------------------------------------------------
 		// LEVEL 2
-		
-		// ----------------------------------------------------
-
 		else if (
 			mx >= 367 &&
 			mx <= 645 &&
@@ -266,9 +196,8 @@ void iMouse(
 		}
 
 
-		// ----------------------------------------------------
-		// BACK TO MENU
-else if (
+		// BACK
+		else if (
 			mx >= 773 &&
 			mx <= 949 &&
 			my >= 33 &&
@@ -280,8 +209,11 @@ else if (
 			selectedMenuButton = 0;
 		}
 	}
-// PLAYER ATTACK
-	// LEVEL 1 AND LEVEL 2
+
+
+	// ========================================================
+	// ATTACK
+	// LEVEL 1 + LEVEL 2
 	// ========================================================
 
 	else if (
@@ -313,11 +245,7 @@ else if (
 void iKeyboard(unsigned char key)
 {
 	// ========================================================
-	// B = BACK TO MAIN MENU
-	//
-	// STORY
-	// GAME OVER
-	// WIN
+	// BACK TO MENU
 	// ========================================================
 
 	if (key == 'b' || key == 'B')
@@ -374,16 +302,6 @@ void iSpecialKeyboard(unsigned char key)
 
 int main()
 {
-	// ========================================================
-	// INITIALIZE GAME WINDOW
-	// ========================================================
-	//
-	// New screen size:
-	// Width  = 1000
-	// Height = 600
-	//
-	// ========================================================
-
 	iInitialize(
 		1000,
 		600,
@@ -392,7 +310,7 @@ int main()
 
 
 	// ========================================================
-	// MENU
+	// MENU / STORY / WIN / GAME OVER
 	// ========================================================
 
 	menuImage =
@@ -400,40 +318,20 @@ int main()
 		"Images//menu.png"
 		);
 
-
-	// ========================================================
-	// LEVEL SELECT
-	// ========================================================
-
 	levelSelectImage =
 		iLoadImage(
 		"Images//level_select.png"
 		);
-
-
-	// ========================================================
-	// STORY
-	// ========================================================
 
 	storyImage =
 		iLoadImage(
 		"Images//story.png"
 		);
 
-
-	// ========================================================
-	// WIN
-	// ========================================================
-
 	winImage =
 		iLoadImage(
 		"Images//win.png"
 		);
-
-
-	// ========================================================
-	// GAME OVER
-	// ========================================================
 
 	gameoverImage =
 		iLoadImage(
@@ -442,13 +340,14 @@ int main()
 
 
 	// ========================================================
-	// LEVEL 1 BACKGROUND
+	// LEVEL 1 BACKGROUNDS
 	// ========================================================
 
 	backgroundImage =
 		iLoadImage(
 		"Images//background.png"
 		);
+
 	backgroundImage2 =
 		iLoadImage(
 		"Images//background2.png"
@@ -459,29 +358,36 @@ int main()
 		"Images//background3.png"
 		);
 
+
 	// ========================================================
-	// LEVEL 2 BACKGROUND
+	// LEVEL 2 BACKGROUNDS
 	// ========================================================
 
-	level2BackgroundImage =
+	level2BackgroundImage1 =
 		iLoadImage(
-		"Images//level2_background.png"
+		"Images//level2_background1.png"
+		);
+
+	level2BackgroundImage2 =
+		iLoadImage(
+		"Images//level2_background2.png"
+		);
+
+	level2BackgroundImage3 =
+		iLoadImage(
+		"Images//level2_background3.png"
 		);
 
 
 	// ========================================================
-	// PLAYER IDLE
+	// PLAYER
 	// ========================================================
 
 	playerImage =
 		iLoadImage(
 		"Images//player.png"
 		);
-	
 
-	// ========================================================
-	// PLAYER RUN
-	// ========================================================
 
 	runImage[0] =
 		iLoadImage(
@@ -498,10 +404,6 @@ int main()
 		"Images//run_3.png"
 		);
 
-
-	// ========================================================
-	// PLAYER ATTACK
-	// ========================================================
 
 	attackImage[0] =
 		iLoadImage(
@@ -525,19 +427,13 @@ int main()
 
 
 	// ========================================================
-	// ENEMY IDLE
-	// SAME ENEMY FOR BOTH LEVELS
+	// LEVEL 1 ENEMY
 	// ========================================================
 
 	enemyImage =
 		iLoadImage(
 		"Images//enemy.png"
 		);
-
-
-	// ========================================================
-	// ENEMY RUN
-	// ========================================================
 
 	enemyRunImage[0] =
 		iLoadImage(
@@ -554,11 +450,6 @@ int main()
 		"Images//enemy_run3.png"
 		);
 
-
-	// ========================================================
-	// ENEMY ATTACK
-	// ========================================================
-
 	enemyAttackImage[0] =
 		iLoadImage(
 		"Images//enemy_attack_1.png"
@@ -571,7 +462,87 @@ int main()
 
 
 	// ========================================================
-	// UI
+	// LEVEL 2 - FIRST ENEMY TYPE
+	// ========================================================
+
+	level2EnemyImage =
+		iLoadImage(
+		"Images//level2_enemy.png"
+		);
+
+	level2EnemyRunImage[0] =
+		iLoadImage(
+		"Images//level2_enemy_run1.png"
+		);
+
+	level2EnemyRunImage[1] =
+		iLoadImage(
+		"Images//level2_enemy_run2.png"
+		);
+
+	level2EnemyRunImage[2] =
+		iLoadImage(
+		"Images//level2_enemy_run3.png"
+		);
+
+	level2EnemyAttackImage[0] =
+		iLoadImage(
+		"Images//level2_enemy_attack1.png"
+		);
+
+	level2EnemyAttackImage[1] =
+		iLoadImage(
+		"Images//level2_enemy_attack2.png"
+		);
+
+	level2EnemyAttackImage[2] =
+		iLoadImage(
+		"Images//level2_enemy_attack3.png"
+		);
+
+
+	// ========================================================
+	// LEVEL 2 - SECOND ENEMY TYPE
+	// ========================================================
+
+	level2Enemy1Image =
+		iLoadImage(
+		"Images//level2_enemy1_idle.png"
+		);
+
+	level2Enemy1RunImage[0] =
+		iLoadImage(
+		"Images//level2_enemy1_run1.png"
+		);
+
+	level2Enemy1RunImage[1] =
+		iLoadImage(
+		"Images//level2_enemy1_run2.png"
+		);
+
+	level2Enemy1RunImage[2] =
+		iLoadImage(
+		"Images//level2_enemy1_run3.png"
+		);
+
+	level2Enemy1AttackImage[0] =
+		iLoadImage(
+		"Images//level2_enemy1_attack1.png"
+		);
+
+	level2Enemy1AttackImage[1] =
+		iLoadImage(
+		"Images//level2_enemy1_attack2.png"
+		);
+
+	level2Enemy1AttackImage[2] =
+		iLoadImage(
+		"Images//level2_enemy1_attack3.png"
+		);
+
+
+	// ========================================================
+	// HUD
 	// ========================================================
 
 	heartImage =
@@ -595,32 +566,44 @@ int main()
 		0,
 		NULL
 		);
+
 	mciSendString(
 		"open \"Audios//attack.wav\" alias attacksound",
-		NULL, 0, NULL
+		NULL,
+		0,
+		NULL
 		);
 
 	mciSendString(
 		"open \"Audios//enemy_hit.wav\" alias enemyhitsound",
-		NULL, 0, NULL
+		NULL,
+		0,
+		NULL
 		);
 
 	mciSendString(
 		"open \"Audios//victory.wav\" alias victorysound",
-		NULL, 0, NULL
+		NULL,
+		0,
+		NULL
 		);
 
 	mciSendString(
 		"open \"Audios//win.wav\" alias winsound",
-		NULL, 0, NULL
+		NULL,
+		0,
+		NULL
 		);
 
-	
 
+	// Game over sound
+	mciSendString(
+		"open \"Audios//gameover.mp3\" alias ggsong",
+		NULL,
+		0,
+		NULL
+		);
 
-	// ========================================================
-	// BACKGROUND MUSIC
-	// ========================================================
 
 	mciSendString(
 		"play bgsong repeat",
@@ -631,7 +614,7 @@ int main()
 
 
 	// ========================================================
-	// GAME UPDATE
+	// TIMERS
 	// ========================================================
 
 	iSetTimer(
@@ -639,60 +622,30 @@ int main()
 		fixedUpdate
 		);
 
-
-	// ========================================================
-	// ENEMY DAMAGE
-	// ========================================================
-
 	iSetTimer(
 		1000,
 		enemyAttackUpdate
 		);
-
-
-	// ========================================================
-	// PLAYER RUN ANIMATION
-	// ========================================================
 
 	iSetTimer(
 		120,
 		updatePlayerAnimation
 		);
 
-
-	// ========================================================
-	// PLAYER ATTACK ANIMATION
-	// ========================================================
-
 	iSetTimer(
 		100,
 		updateAttackAnimation
 		);
-
-
-	// ========================================================
-	// ENEMY RUN ANIMATION
-	// ========================================================
 
 	iSetTimer(
 		120,
 		updateEnemyAnimation
 		);
 
-
-	// ========================================================
-	// ENEMY ATTACK ANIMATION
-	// ========================================================
-
 	iSetTimer(
 		150,
 		updateEnemyAttackAnimation
 		);
-
-
-	// ========================================================
-	// MENU TIMER
-	// ========================================================
 
 	iSetTimer(
 		30,
@@ -700,12 +653,7 @@ int main()
 		);
 
 
-	// ========================================================
-	// START GAME
-	// ========================================================
-
 	iStart();
-
 
 	return 0;
 }
