@@ -267,6 +267,22 @@ void setLevel1PlayerOnPlatform()
 
 void resetLevel()
 {
+	// STOP PREVIOUS VICTORY SOUND
+	mciSendString(
+		"stop victorysound",
+		NULL,
+		0,
+		NULL
+		);
+
+	// START BACKGROUND MUSIC
+	mciSendString(
+		"play bgsong repeat",
+		NULL,
+		0,
+		NULL
+		);
+
 	playerX = 150;
 
 	level1Stage = 0;
@@ -1873,7 +1889,8 @@ void fixedUpdateLevel1()
 				0,
 				NULL
 				);
-			gameState = 4;
+			// LEVEL 1 COMPLETE -> LEVEL SELECT
+			gameState = 6;
 
 			playerMoving = false;
 
@@ -2277,10 +2294,26 @@ void fixedUpdateLevel2()
 			// ==================================================
 			// Only the transition is changed here.
 			// Level 2 gameplay remains the same.
-			// Instead of WIN, Level 3 starts automatically.
+			// Return to Level Select so Level 3 can be selected.
 			// ==================================================
 
-			startLevel3();
+			// STOP BACKGROUND MUSIC
+			mciSendString(
+				"stop bgsong",
+				NULL,
+				0,
+				NULL
+				);
+
+			// PLAY VICTORY SOUND
+			mciSendString(
+				"play victorysound from 0",
+				NULL,
+				0,
+				NULL
+				);
+
+			gameState = 6;
 
 			return;
 		}
@@ -2909,6 +2942,22 @@ void fixedUpdateLevel3()
 
 void startLevel2()
 {
+	// STOP PREVIOUS VICTORY SOUND
+	mciSendString(
+		"stop victorysound",
+		NULL,
+		0,
+		NULL
+		);
+
+	// START BACKGROUND MUSIC
+	mciSendString(
+		"play bgsong repeat",
+		NULL,
+		0,
+		NULL
+		);
+
 	gameState = 5;
 
 
@@ -2973,6 +3022,22 @@ void startLevel2()
 
 void startLevel3()
 {
+	// STOP PREVIOUS VICTORY SOUND
+	mciSendString(
+		"stop victorysound",
+		NULL,
+		0,
+		NULL
+		);
+
+	// START BACKGROUND MUSIC
+	mciSendString(
+		"play bgsong repeat",
+		NULL,
+		0,
+		NULL
+		);
+
 	gameState = 7;
 
 

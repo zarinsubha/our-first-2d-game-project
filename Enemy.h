@@ -392,6 +392,7 @@ void enemyAttackUpdate()
 		playerHealth = 0;
 
 		enemyAttacking = false;
+
 		// STOP BACKGROUND MUSIC
 		mciSendString(
 			"stop bgsong",
@@ -409,10 +410,7 @@ void enemyAttackUpdate()
 			NULL
 			);
 
-
 		gameState = 3;
-
-		
 	}
 }
 
