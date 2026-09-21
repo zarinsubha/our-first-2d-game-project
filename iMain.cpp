@@ -90,6 +90,10 @@ void iPassiveMouseMove(int mx, int my)
 // MOUSE CLICK
 // ============================================================
 
+// ============================================================
+// MOUSE CLICK
+// ============================================================
+
 void iMouse(
 	int button,
 	int state,
@@ -97,6 +101,7 @@ void iMouse(
 	int my
 	)
 {
+	// Only respond to left mouse button
 	if (
 		button != GLUT_LEFT_BUTTON ||
 		state != GLUT_DOWN
@@ -112,59 +117,96 @@ void iMouse(
 
 	if (gameState == 0)
 	{
-		// PLAY
+		// ----------------------------------------------------
+		// START GAME
+		// ----------------------------------------------------
 		if (
-			mx >= 86 &&
-			mx <= 379 &&
-			my >= 296 &&
-			my <= 350
+			mx >= 390 &&
+			mx <= 610 &&
+			my >= 345 &&
+			my <= 400
 			)
 		{
 			selectedMenuButton = 1;
 
-			menuActionTimer = 20;
+			// Start directly from Level 1
+			resetLevel();
+
+			gameState = 2;
+
+			return;
 		}
 
 
-		// LEVEL SELECT
+		// ----------------------------------------------------
+		// LEVELS
+		// ----------------------------------------------------
 		else if (
-			mx >= 86 &&
-			mx <= 379 &&
-			my >= 233 &&
-			my <= 292
+			mx >= 390 &&
+			mx <= 610 &&
+			my >= 295 &&
+			my <= 345
 			)
 		{
 			selectedMenuButton = 2;
 
+			// Go to Level Select page
 			gameState = 6;
+
+			return;
 		}
 
 
-		// STORY
+		// ----------------------------------------------------
+		// SCORES
+		// ----------------------------------------------------
 		else if (
-			mx >= 86 &&
-			mx <= 379 &&
-			my >= 108 &&
-			my <= 167
+			mx >= 390 &&
+			mx <= 610 &&
+			my >= 240 &&
+			my <= 295
+			)
+		{
+			selectedMenuButton = 3;
+
+			// No score screen implemented yet
+			return;
+		}
+
+
+		// ----------------------------------------------------
+		// CREDITS
+		// ----------------------------------------------------
+		else if (
+			mx >= 390 &&
+			mx <= 610 &&
+			my >= 185 &&
+			my <= 240
 			)
 		{
 			selectedMenuButton = 4;
 
-			gameState = 1;
+			// No credits screen implemented yet
+			return;
 		}
 
 
+		// ----------------------------------------------------
 		// EXIT
+		// ----------------------------------------------------
 		else if (
-			mx >= 86 &&
-			mx <= 379 &&
-			my >= 50 &&
-			my <= 108
+			mx >= 390 &&
+			mx <= 610 &&
+			my >= 135 &&
+			my <= 185
 			)
 		{
 			selectedMenuButton = 5;
 
-			menuActionTimer = 20;
+			// Exit immediately
+			exit(0);
+
+			return;
 		}
 	}
 
@@ -175,43 +217,53 @@ void iMouse(
 
 	else if (gameState == 6)
 	{
+		// ----------------------------------------------------
 		// LEVEL 1
+		// ----------------------------------------------------
 		if (
-			mx >= 74 &&
-			mx <= 340 &&
-			my >= 121 &&
-			my <= 438
+			mx >= 120 &&
+			mx <= 350 &&
+			my >= 160 &&
+			my <= 395
 			)
 		{
 			resetLevel();
 
 			gameState = 2;
+
+			return;
 		}
 
 
+		// ----------------------------------------------------
 		// LEVEL 2
+		// ----------------------------------------------------
 		else if (
-			mx >= 367 &&
-			mx <= 645 &&
-			my >= 121 &&
-			my <= 438
+			mx >= 380 &&
+			mx <= 620 &&
+			my >= 160 &&
+			my <= 395
 			)
 		{
 			startLevel2();
+
+			return;
 		}
 
 
-		// BACK
+		// ----------------------------------------------------
+		// LEVEL 3
+		// ----------------------------------------------------
 		else if (
-			mx >= 773 &&
-			mx <= 949 &&
-			my >= 33 &&
-			my <= 88
+			mx >= 650 &&
+			mx <= 880 &&
+			my >= 160 &&
+			my <= 395
 			)
 		{
-			gameState = 0;
+			startLevel3();
 
-			selectedMenuButton = 0;
+			return;
 		}
 	}
 
@@ -239,6 +291,7 @@ void iMouse(
 			attackHit = false;
 
 			attackTimer = 20;
+
 			// PLAY ATTACK SOUND
 			mciSendString(
 				"play attacksound from 0",
@@ -255,21 +308,42 @@ void iMouse(
 // KEYBOARD
 // ============================================================
 
+// ============================================================
+// KEYBOARD
+// ============================================================
+
 void iKeyboard(unsigned char key)
 {
 	// ========================================================
-	// BACK TO MENU
+	// B = BACK
 	// ========================================================
 
 	if (key == 'b' || key == 'B')
 	{
+		// ----------------------------------------------------
+		// LEVEL SELECT -> MENU
+		// ----------------------------------------------------
+		if (gameState == 6)
+		{
+			gameState = 0;
+
+			selectedMenuButton = 0;
+
+			menuActionTimer = 0;
+
+			return;
+		}
+
+
+		// ----------------------------------------------------
+		// STORY / GAME OVER / WIN -> MENU
+		// ----------------------------------------------------
 		if (
 			gameState == 1 ||
 			gameState == 3 ||
 			gameState == 4
 			)
 		{
-
 			// STOP VICTORY / GAME OVER SOUND
 			mciSendString(
 				"stop victorysound",
@@ -278,12 +352,15 @@ void iKeyboard(unsigned char key)
 				NULL
 				);
 
+
 			mciSendString(
 				"stop ggsong",
 				NULL,
 				0,
 				NULL
 				);
+
+
 			// RESTART BACKGROUND MUSIC
 			mciSendString(
 				"play bgsong repeat",
@@ -291,6 +368,7 @@ void iKeyboard(unsigned char key)
 				0,
 				NULL
 				);
+
 
 			gameState = 0;
 
@@ -320,8 +398,26 @@ void iKeyboard(unsigned char key)
 			isJumping = true;
 		}
 	}
-}
 
+
+	// ========================================================
+	// LEVEL 3 JUMP
+	// ========================================================
+
+	if (gameState == 7)
+	{
+		if (
+			(key == 'w' || key == 'W') &&
+			!isJumping &&
+			!isAttacking
+			)
+		{
+			velocityY = jumpPower;
+
+			isJumping = true;
+		}
+	}
+}
 
 // ============================================================
 // SPECIAL KEYBOARD
