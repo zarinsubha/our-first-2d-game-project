@@ -142,28 +142,6 @@ const int level2PlatformY = 105;
 
 
 // ============================================================
-// LEVEL 2 OBSTACLE
-// ============================================================
-
-int level2ObstacleImage;
-
-const int level2ObstacleX = 650;
-
-const int level2ObstacleY = 105;
-
-const int level2ObstacleWidth = 180;
-
-const int level2ObstacleHeight = 60;
-
-bool level2EnemyActivated = false;
-
-// True only while the player is performing the special jump over the spikes.
-bool level2JumpingOverObstacle = false;
-
-int level2ObstacleDamageTimer = 0;
-
-
-// ============================================================
 // LEVEL 3 PLATFORM
 // ============================================================
 
@@ -1353,11 +1331,6 @@ void updateLevel2PlayerAttack()
 
 		spawnLevel2Enemy1();
 
-		// Keep the enemy on the far side of the obstacle.
-		enemyX = level2ObstacleX + level2ObstacleWidth + 220;
-		enemyY = level2PlatformY;
-		level2EnemyActivated = false;
-
 		return;
 	}
 
@@ -1413,20 +1386,12 @@ void updateLevel2PlayerAttack()
 		level2CurrentWave++;
 
 		spawnLevel2Enemy();
-
-		enemyX = level2ObstacleX + level2ObstacleWidth + 220;
-		enemyY = level2PlatformY;
-		level2EnemyActivated = false;
 	}
 	else
 	{
 		level2CurrentWave++;
 
 		spawnLevel2Enemy1();
-
-		enemyX = level2ObstacleX + level2ObstacleWidth + 220;
-		enemyY = level2PlatformY;
-		level2EnemyActivated = false;
 	}
 }
 
@@ -1645,20 +1610,6 @@ void fixedUpdateLevel1()
 				playerMoving = true;
 
 				faceRight = false;
-			}
-		}
-
-
-		// Player cannot walk through a living enemy in Level 1.
-		if (enemyAlive)
-		{
-			if (playerX < enemyX && playerX + playerWidth > enemyX)
-			{
-				playerX = enemyX - playerWidth;
-			}
-			else if (playerX > enemyX && playerX < enemyX + enemyWidth)
-			{
-				playerX = enemyX + enemyWidth;
 			}
 		}
 
@@ -1983,10 +1934,7 @@ void fixedUpdateLevel2()
 		level2Stage == 1
 		)
 	{
-		// ====================================================
-		// RIGHT MOVEMENT
-		// ====================================================
-
+		// RIGHT
 		if (
 			isKeyPressed('d') ||
 			isKeyPressed('D')
@@ -1994,35 +1942,7 @@ void fixedUpdateLevel2()
 		{
 			if (!isAttacking)
 			{
-				// Give the player a little more horizontal distance
-				// while jumping over the spikes.
-				int currentSpeed = playerSpeed;
-
-				if (isJumping && level2JumpingOverObstacle)
-				{
-					currentSpeed = 12;
-				}
-
-				int nextPlayerX =
-					playerX + currentSpeed;
-
-
-				// Do not let the player walk through the enemy.
-				// During the obstacle jump the enemy is still beyond
-				// the obstacle, so this does not block the jump.
-				if (
-					enemyAlive &&
-					nextPlayerX + playerWidth > enemyX &&
-					playerX < enemyX
-					)
-				{
-					playerX = enemyX - playerWidth;
-				}
-				else
-				{
-					playerX = nextPlayerX;
-				}
-
+				playerX += playerSpeed;
 
 				playerMoving = true;
 
@@ -2031,10 +1951,7 @@ void fixedUpdateLevel2()
 		}
 
 
-		// ====================================================
-		// LEFT MOVEMENT
-		// ====================================================
-
+		// LEFT
 		if (
 			isKeyPressed('a') ||
 			isKeyPressed('A')
@@ -2042,24 +1959,7 @@ void fixedUpdateLevel2()
 		{
 			if (!isAttacking)
 			{
-				int nextPlayerX =
-					playerX - playerSpeed;
-
-
-				// Do not let the player walk through the enemy.
-				if (
-					enemyAlive &&
-					nextPlayerX < enemyX + enemyWidth &&
-					playerX > enemyX
-					)
-				{
-					playerX = enemyX + enemyWidth;
-				}
-				else
-				{
-					playerX = nextPlayerX;
-				}
-
+				playerX -= playerSpeed;
 
 				playerMoving = true;
 
@@ -2087,41 +1987,7 @@ void fixedUpdateLevel2()
 
 
 		// ====================================================
-		// JUMP START
-		// Press W to jump over the Level 2 obstacle.
-		// ====================================================
-
-		if (
-			(isKeyPressed('w') || isKeyPressed('W')) &&
-			!isJumping
-			)
-		{
-			// Strong jump for Level 2.
-			// This gives enough air time to clear the whole spike strip.
-			velocityY = 32;
-
-			isJumping = true;
-
-			// If the jump starts near the spikes, keep the player in
-			// the obstacle-jump state until the spikes are crossed.
-			if (playerX + playerWidth >= level2ObstacleX - 120 &&
-				playerX <= level2ObstacleX + level2ObstacleWidth)
-			{
-				level2JumpingOverObstacle = true;
-			}
-
-
-			// Pressing W cancels an active attack so the jump can start.
-			isAttacking = false;
-
-			attackHit = false;
-
-			attackTimer = 0;
-		}
-
-
-		// ====================================================
-		// JUMP MOVEMENT + GRAVITY
+		// JUMP
 		// ====================================================
 
 		if (isJumping)
@@ -2142,111 +2008,12 @@ void fixedUpdateLevel2()
 				velocityY = 0;
 
 				isJumping = false;
-
-				// If the player has landed before clearing the spikes,
-				// the normal obstacle damage code below will handle it.
 			}
 		}
 		else
 		{
 			playerY =
 				level2PlatformY;
-		}
-
-
-		// ====================================================
-		// LEVEL 2 OBSTACLE
-		// ====================================================
-
-		if (level2ObstacleDamageTimer > 0)
-		{
-			level2ObstacleDamageTimer--;
-		}
-
-
-		// The special jump is finished only after the player's
-		// whole body has moved beyond the right side of the spikes.
-		if (level2JumpingOverObstacle &&
-			playerX > level2ObstacleX + level2ObstacleWidth + 20)
-		{
-			level2JumpingOverObstacle = false;
-		}
-
-
-		// The obstacle hurts the player only when they are standing
-		// on the spikes, NOT while performing the obstacle jump.
-		if (
-			!isJumping &&
-			!level2JumpingOverObstacle &&
-			playerX + playerWidth > level2ObstacleX &&
-			playerX < level2ObstacleX + level2ObstacleWidth
-			)
-		{
-			if (level2ObstacleDamageTimer == 0)
-			{
-				playerHealth--;
-
-				level2ObstacleDamageTimer = 30;
-			}
-
-
-			playerX =
-				level2ObstacleX -
-				playerWidth -
-				10;
-
-			playerY = level2PlatformY;
-
-			velocityY = 0;
-
-			isJumping = false;
-
-			level2JumpingOverObstacle = false;
-
-
-			if (playerHealth <= 0)
-			{
-				playerHealth = 0;
-
-				enemyAttacking = false;
-
-
-				mciSendString(
-					"stop bgsong",
-					NULL,
-					0,
-					NULL
-					);
-
-
-				mciSendString(
-					"play ggsong from 0",
-					NULL,
-					0,
-					NULL
-					);
-
-
-				gameState = 3;
-
-				return;
-			}
-		}
-
-
-		// ====================================================
-		// ENEMY ACTIVATION
-		// ====================================================
-
-		// The enemy starts moving only after the player has
-		// successfully crossed the obstacle.
-		if (
-			!level2EnemyActivated &&
-			playerX >
-			level2ObstacleX + level2ObstacleWidth
-			)
-		{
-			level2EnemyActivated = true;
 		}
 
 
@@ -2288,20 +2055,7 @@ void fixedUpdateLevel2()
 		// ENEMY MOVEMENT
 		// ====================================================
 
-		if (level2EnemyActivated && enemyAlive)
-		{
-			updateEnemyMovement();
-
-			// Enemy is never allowed to cross the obstacle.
-			if (
-				enemyX <
-				level2ObstacleX + level2ObstacleWidth
-				)
-			{
-				enemyX =
-					level2ObstacleX + level2ObstacleWidth;
-			}
-		}
+		updateEnemyMovement();
 
 
 		// ====================================================
@@ -2353,8 +2107,6 @@ void fixedUpdateLevel2()
 
 		enemyAlive = false;
 
-		level2EnemyActivated = false;
-
 
 		// RIGHT
 		if (
@@ -2408,7 +2160,8 @@ void fixedUpdateLevel2()
 		}
 
 
-		playerY = level2PlatformY;
+		playerY =
+			level2PlatformY;
 
 
 		int playerCenter =
@@ -2431,7 +2184,8 @@ void fixedUpdateLevel2()
 
 			playerX = 100;
 
-			playerY = level2PlatformY;
+			playerY =
+				level2PlatformY;
 
 			playerMoving = false;
 
@@ -2464,8 +2218,6 @@ void fixedUpdateLevel2()
 
 		enemyAlive = false;
 
-		level2EnemyActivated = false;
-
 
 		// RIGHT
 		if (
@@ -2501,20 +2253,6 @@ void fixedUpdateLevel2()
 		}
 
 
-		// Player cannot walk through a living enemy.
-		if (enemyAlive)
-		{
-			if (playerX < enemyX && playerX + playerWidth > enemyX)
-			{
-				playerX = enemyX - playerWidth;
-			}
-			else if (playerX > enemyX && playerX < enemyX + enemyWidth)
-			{
-				playerX = enemyX + enemyWidth;
-			}
-		}
-
-
 		if (playerX < 0)
 		{
 			playerX = 0;
@@ -2533,7 +2271,8 @@ void fixedUpdateLevel2()
 		}
 
 
-		playerY = level2PlatformY;
+		playerY =
+			level2PlatformY;
 
 
 		int playerCenter =
@@ -2550,6 +2289,15 @@ void fixedUpdateLevel2()
 
 		if (jadeDistance <= 90)
 		{
+			// ==================================================
+			// LEVEL 2 COMPLETE
+			// ==================================================
+			// Only the transition is changed here.
+			// Level 2 gameplay remains the same.
+			// Return to Level Select so Level 3 can be selected.
+			// ==================================================
+
+			// STOP BACKGROUND MUSIC
 			mciSendString(
 				"stop bgsong",
 				NULL,
@@ -2557,6 +2305,7 @@ void fixedUpdateLevel2()
 				NULL
 				);
 
+			// PLAY VICTORY SOUND
 			mciSendString(
 				"play victorysound from 0",
 				NULL,
@@ -2742,20 +2491,6 @@ void fixedUpdateLevel3()
 				playerMoving = true;
 
 				faceRight = false;
-			}
-		}
-
-
-		// Player cannot walk through a living enemy.
-		if (enemyAlive)
-		{
-			if (playerX < enemyX && playerX + playerWidth > enemyX)
-			{
-				playerX = enemyX - playerWidth;
-			}
-			else if (playerX > enemyX && playerX < enemyX + enemyWidth)
-			{
-				playerX = enemyX + enemyWidth;
 			}
 		}
 
@@ -3269,12 +3004,6 @@ void startLevel2()
 
 	level2EnemyType = 0;
 
-	level2EnemyActivated = false;
-
-	level2JumpingOverObstacle = false;
-
-	level2ObstacleDamageTimer = 0;
-
 
 	score = 0;
 
@@ -3284,10 +3013,6 @@ void startLevel2()
 	// ========================================================
 
 	spawnLevel2Enemy();
-
-	// Place the first enemy beyond the obstacle.
-	enemyX = level2ObstacleX + level2ObstacleWidth + 220;
-	enemyY = level2PlatformY;
 }
 
 
@@ -3435,23 +3160,9 @@ void drawLevel2()
 			);
 
 
-		// Level 2 obstacle / spikes.
-		iShowImage(
-			level2ObstacleX - level2CameraX,
-			level2ObstacleY,
-			level2ObstacleWidth,
-			level2ObstacleHeight,
-			level2ObstacleImage
-			);
-
-
 		drawPlayerLevel2();
 
-		// Enemy becomes visible only after the player crosses the obstacle.
-		if (level2EnemyActivated)
-		{
-			drawEnemyLevel2();
-		}
+		drawEnemyLevel2();
 	}
 
 
